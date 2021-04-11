@@ -11,32 +11,26 @@ struct CaesarCipher
 {
     static QString encode(const QString& text, const unsigned& offset)
     {
-        using Type = uchar;//QChar;
         QString result = text;
-        const Type start = 'a';
-        const Type end = 'z';
-        auto validateChar = [&](const Type& c){ return c >= start && c <= end;};
-        auto toInt = [](const Type& c){ return static_cast<int>(c); };
-        auto toChar = [](const int& i) -> Type{ return static_cast<Type>(i); };
+        const QChar start = u'а';
+        const QChar end = u'я';
+        auto validateChar = [&](const QChar& c){ return (c.toLower() >= start && c.toLower() <= end); };
+        auto validateString = [&](const QString& str){ return std::all_of(str.begin(), str.end(), validateChar); };
 
+        if(!validateString(text))
+            return QString();
 
         std::transform(text.begin(), text.end(), result.begin(), [&](const QChar& c) -> QChar
         {
             bool isUpper = c.isUpper();
-            auto tmp = c.toLower().toLatin1();
-            if(validateChar(tmp))
-            {
-                auto currentIndex = toInt(tmp);
-                auto newIndex = currentIndex+offset;
-                uchar encodeChar = (newIndex) > end ? toChar( toInt(start) + (  newIndex % (end+1) ) )
-                                                    : toChar(newIndex);
-                return  isUpper ? QChar(encodeChar).toUpper()
-                                : QChar(encodeChar);
-            }
-            return QChar();
+            unsigned _offset = c.unicode() + offset;
+            unsigned newLetter = _offset > end.unicode() ? start.unicode() + (_offset - end.unicode()-1)
+                                                         : _offset;
+            QChar s(newLetter);
+            return isUpper ? s.toUpper() : s;
         });
 
-        qDebug() << result;
+        qDebug() << "result" << result;
 
         return result;
     }
