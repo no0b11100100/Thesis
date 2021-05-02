@@ -1,44 +1,57 @@
-import QtQuick 2.0
+import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 Rectangle {
     property variant headerModel
     property variant contentModel
+    id: _root
     border.color: "red"
     border.width: 2
 
-    Column {
-        spacing: 2
-        Repeater {
-            model: headerModel
-            Column {
-                spacing: 1
-                Button {
-                    property bool isActive: false
-                    property string sourceIcon: "close.png"
-                    id: _button
-                    text: headerModel[index]
-                    icon.source: sourceIcon
-                    icon.width: 10
-                    icon.height: 10
-                    background: Rectangle {
-                        color: "transparent"
-                    }
+    ScrollView {
+        id: _scroll
+        anchors.fill: parent
+        clip: true
+        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
-                    onClicked: {
-                        _button.isActive = !_button.isActive
-                        _button.sourceIcon = _button.isActive === true ? "open.png" : "close.png"
-                    }
-                } // Button
+        Column {
+            spacing: 2
+            Repeater {
+                model: headerModel
+                Column {
+                    spacing: 1
+                    Button {
+                        property bool isActive: false
+                        id: _button
+                        text: headerModel[index]
+                        font.pointSize: 14
+                        icon.source:  _button.isActive === true ? "open.png" : "close.png"
+                        icon.width: 10
+                        icon.height: 10
+                        background: Rectangle {
+                            color: "transparent"
+                        }
 
-                Text {
-                    text: _button.isActive === true ?
-                            index >= contentModel.length ? "" : contentModel[index]
-                          : ""
-                    anchors.left: parent.left
-                    anchors.leftMargin: 8
-                } // Text
-            } // Column
-        } // Repeater
-    } // Column
+                        onClicked: {
+                            _button.isActive = !_button.isActive
+                        }
+                    } // Button
+
+                    Text {
+                        id: _text
+                        width: _button.isActive === true ? _root.width : 0
+                        leftPadding: 8
+                        rightPadding: _button.isActive === true ? 15 : 0
+                        text: _button.isActive === true ?
+                                  index >= contentModel.length ? "" : contentModel[index]
+                        : ""
+
+                        font.pointSize: 14
+                        wrapMode: Text.Wrap
+                        lineHeight: 1
+                    } // Text
+                } // Column
+            } // Repeater
+        } // Column
+    } // ScrollView
 }

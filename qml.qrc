@@ -3,6 +3,9 @@
         <file>main.qml</file>
         <file>TextComponent.qml</file>
         <file>open.png</file>
+        <file>TextLabel.qml</file>
         <file>close.png</file>
+        <file>ChoiceLab.qml</file>
+        <file>Information.qml</file>
     </qresource>
 </RCC>
