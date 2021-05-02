@@ -33,7 +33,13 @@ set(PROJECT_SOURCES
         Replacement.h
         controller.h
         Vigenere.h
+        Permutation.h
+        rc4.h
+        RSA.h
+        DES.h
         qml.qrc
+        open.png
+        close.png
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

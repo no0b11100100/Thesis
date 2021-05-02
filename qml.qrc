@@ -1,7 +1,8 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>TextLabel.qml</file>
-        <file>Algorithm.qml</file>
+        <file>TextComponent.qml</file>
+        <file>open.png</file>
+        <file>close.png</file>
     </qresource>
 </RCC>
