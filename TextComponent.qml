@@ -43,7 +43,8 @@ Rectangle {
                         leftPadding: 8
                         rightPadding: _button.isActive === true ? 15 : 0
                         text: _button.isActive === true ?
-                                  index >= contentModel.length ? "" : contentModel[index]
+                                  index >= contentModel.length ? "" :
+                                         contentModel[index] !== "" ? contentModel[index] : "Данные недоступны"
                         : ""
 
                         font.pointSize: 14

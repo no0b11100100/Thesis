@@ -14,6 +14,8 @@ struct CaesarCipher
         QString result = text;
         const QChar start = u'а';
         const QChar end = u'я';
+        const QChar a = u'ё';
+        qDebug() << "a" << a;
         auto validateChar = [&](const QChar& c){ return (c.toLower() >= start && c.toLower() <= end); };
         auto validateString = [&](const QString& str){ return std::all_of(str.begin(), str.end(), validateChar); };
 
@@ -22,12 +24,11 @@ struct CaesarCipher
 
         std::transform(text.begin(), text.end(), result.begin(), [&](const QChar& c) -> QChar
         {
-            bool isUpper = c.isUpper();
             unsigned _offset = c.unicode() + offset;
             unsigned newLetter = _offset > end.unicode() ? start.unicode() + (_offset - end.unicode()-1)
                                                          : _offset;
             QChar s(newLetter);
-            return isUpper ? s.toUpper() : s;
+            return s;
         });
 
         qDebug() << "result" << result;

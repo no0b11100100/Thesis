@@ -40,6 +40,7 @@ set(PROJECT_SOURCES
         qml.qrc
         open.png
         close.png
+        consts.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

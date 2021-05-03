@@ -13,19 +13,33 @@ Rectangle {
         Column {
             spacing: 2
             Repeater {
+                property int currentButton: 0
+                id: _repeater
                 model: listModel
                 Button {
+                    property string backColor: "grey"
                     id: _button
                     width: _root.width
-                    text: listModel[index]
+                    text: modelData
+
+                    background: Rectangle {
+                        color: backColor
+                    }
 
                     onClicked: {
                         callback(_button.text)
+                        _repeater.itemAt(_repeater.currentButton).backColor = "grey"
+                        _repeater.currentButton = index
+                        _repeater.itemAt(_repeater.currentButton).backColor = "green"
                     }
-                }
-            }
-        }
-    }
+
+                    Component.onCompleted: {
+                        _repeater.itemAt(_repeater.currentButton).backColor = "green"
+                    }
+                } // Button
+            } // Repeater
+        } // Column
+    } // ScrollView
 
     color: "black"
-}
+} // Rectangle
