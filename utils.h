@@ -34,6 +34,16 @@ class Utils
 
         return fromBinaryTo.at(chan);
     }
+
+    template<class Iterator>
+    static void shift(Iterator start, Iterator end)
+    {
+        auto tmp = *start;
+        for(; start != end; ++start)
+            *start = *std::next(start);
+
+        *std::prev(end) = tmp;
+    }
 public:
     static QString stringToBin(QString str)
     {
@@ -56,6 +66,28 @@ public:
         }
 
         qDebug() << result;
+        return result;
+    }
+
+    enum class ShiftDirection : bool
+    {
+        Left,
+        Right,
+    };
+
+    static QString cycleShift(const QString& str, const ShiftDirection& direction, unsigned loops = 1)
+    {
+        QString result = str;
+
+        for(unsigned i{0}; i < loops; ++i)
+        {
+            if(direction == ShiftDirection::Left)
+                shift(result.begin(), result.end());
+            else
+                shift(result.rbegin(), result.rend());
+
+        }
+//        qDebug() << result;
         return result;
     }
 };
