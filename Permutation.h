@@ -11,32 +11,37 @@ namespace Algorithm
 struct Permutation
 {
 private:
-    static QString makeEncode(const std::vector<QString>& table)
+    static QString makeEncode(const std::vector<QString>& table, const QStringList& permuationTable)
     {
-        QString result;
-
-        for(int i{0}, offset{table[0].size()-1}; i < table.size()-1; ++i, --offset)
+        QStringList resultTable = permuationTable;
+        qDebug() << resultTable;
+        int i = 0;
+        for(const auto& column : permuationTable)
         {
-            for(auto it = table.cbegin(); it != table.cend(); ++it)
-            {
-                if(it->operator[](offset) != ' ')
-                    result += it->operator[](offset);
-            }
+            int _column = column.toLongLong()-1;
+            QString resStr = "";
+
+            for(const auto& c : table)
+                if(auto symbol = c.at(i); symbol != ' ')
+                    resStr += symbol;
+
+            ++i;
+            resultTable[_column] = resStr;
         }
 
-        return result;
+        return resultTable.join(QString());
     }
 
     static std::vector<QString> maketable(const QString& text, const int& size)
     {
         auto tableSize = text.size() % size == 0 ? text.size() / size : (text.size() / size) + 1;
         std::vector<QString> table;
-        qDebug() << tableSize;
+        qDebug() << tableSize << text;
         for(int i{0}, offset{0}; i < tableSize; ++i)
         {
             if(offset + size > text.size())
             {
-                auto rest = std::distance(std::next(text.begin() + offset), text.end());
+                auto rest = std::distance(std::next(text.begin() + offset), text.end())+1;
                 QString tmp = text.mid(offset, rest);
                 for(int j{0}; j < (size-rest); ++j)
                     tmp += " ";
@@ -55,11 +60,12 @@ private:
 public:
     static QString encode(const QString& text, const QString& key)
     {
-        auto intKey = key.toLongLong();
+        auto keyTable = key.split(QString(","));
+        int columnCount = keyTable.size();
         auto result = text;
         result.replace(QRegularExpression("\\s+"), QString());
 
-        return makeEncode(maketable(result, intKey));
+        return makeEncode(maketable(result, columnCount), keyTable);
     }
 };
 
