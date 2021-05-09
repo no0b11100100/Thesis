@@ -36,7 +36,7 @@ class SDES
     {
         QString expandedKey = '1' + key + '1';
         makePermautation<10>(expandedKey, permutation);
-        return {expandedKey.mid(0,5), expandedKey.mid(5,10)};
+        return divideIntoTwoParts(expandedKey);
     }
 
     static void P_blockCompression(QString& key, const permutationType<8>& P_block)
@@ -73,7 +73,6 @@ class SDES
 
     static void ExpandText(QString& text, const permutationType<8>& expandTable)
     {
-        qDebug() << "Expanded" <<text;
         makePermautation<8>(text, expandTable);
     }
 
@@ -82,7 +81,6 @@ class SDES
         assert(lhs.size() == rhs.size());
 
         QString result;
-
         std::transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), std::back_inserter(result), [](const QChar& lhs, const QChar& rhs)
         {
             if(lhs == rhs) return QChar('0');
@@ -92,75 +90,109 @@ class SDES
         return result;
     }
 
+    static QString prepareDataForSBox(const QString& text)
+    {
+        assert(text.size() == 4);
+
+        QString key = text;
+        key.front() = text.front();
+        key[1] = text.back();
+        key[2] = text[1];
+        key[3] = text[2];
+
+        return key;
+    }
+
     static QString SBox1 (const QString& text)
     {
-        qDebug() << "S1" << text;
+        auto key = prepareDataForSBox(text);
+        qDebug() << "S1 box" << key;
         static std::unordered_map<QString, QString> table{
-            {"0000", "11"},
-            {"0001", "11"},
+            {"0000", "01"},
+            {"0001", "00"},
             {"0010", "11"},
-            {"0011", "11"},
+            {"0011", "10"},
+
             {"0100", "11"},
-            {"0101", "11"},
-            {"0110", "11"},
-            {"0111", "11"},
-            {"1000", "11"},
-            {"1001", "11"},
-            {"1010", "11"},
+            {"0101", "10"},
+            {"0110", "01"},
+            {"0111", "00"},
+
+            {"1000", "00"},
+            {"1001", "10"},
+            {"1010", "01"},
             {"1011", "11"},
+
             {"1100", "11"},
-            {"1101", "11"},
+            {"1101", "01"},
             {"1110", "11"},
-            {"1111", "11"},
+            {"1111", "10"},
         };
 
-        return table.at(text);
+        return table.at(key);
     }
 
     static QString SBox2 (const QString& text)
     {
-        qDebug() << "S2" << text;
+        auto key = prepareDataForSBox(text);
+        qDebug() << "S2 box" << key;
         static std::unordered_map<QString, QString> table{
-            {"0000", "11"},
-            {"0001", "11"},
-            {"0010", "11"},
+            {"0000", "00"},
+            {"0001", "01"},
+            {"0010", "10"},
             {"0011", "11"},
-            {"0100", "11"},
-            {"0101", "11"},
-            {"0110", "11"},
+
+            {"0100", "10"},
+            {"0101", "00"},
+            {"0110", "01"},
             {"0111", "11"},
+
             {"1000", "11"},
-            {"1001", "11"},
-            {"1010", "11"},
-            {"1011", "11"},
-            {"1100", "11"},
-            {"1101", "11"},
-            {"1110", "11"},
+            {"1001", "00"},
+            {"1010", "01"},
+            {"1011", "00"},
+
+            {"1100", "10"},
+            {"1101", "01"},
+            {"1110", "00"},
             {"1111", "11"},
         };
 
-        return table.at(text);
+        return table.at(key);
     }
 
-    static QString Round(const QString& text, const QString& key)
+    static void SPermutation(QString& text, const permutationType<4>& permutation)
     {
-        auto [L, R] = divideIntoTwoParts(text);
+        makePermautation<4>(text, permutation);
+    }
 
-        ExpandText(R, permutationType<8>{1,2,3,4,4,3,2,1});
+    static QString Round(const QString& text, const QString& key, const int& round)
+    {
+        assert(round == 0 || round == 1);
+        auto [L, R] = divideIntoTwoParts(text);
+        QString resPart = R;
         qDebug() << "R" << R;
+        ExpandText(R, EXPANDED);
+        qDebug() << "expanded text" << R;
         auto xorRes = XOR(R,key);
+        qDebug() << "key" << key << "XOR with key" << xorRes;
 
         auto [s1Part, s2Part] = divideIntoTwoParts(xorRes);
+        QString sBoxesResult = SBox1(s1Part) + SBox2(s2Part);
+        qDebug() << "s box result" << sBoxesResult;
+        SPermutation(sBoxesResult, SBOX_PERMUTATION);
 
-        auto s1 = SBox1(s1Part);
-        auto s2 = SBox2(s2Part);
-
-        QString result = ( XOR((s1+s2), L) ) + L;
-        std::tie(L, R) = divideIntoTwoParts(result);
-        return R+L;
+        QString result = ( XOR(sBoxesResult, L) );
+        qDebug() << "XOR" << result;
+        return round == 0 ? resPart + result : result + resPart;
     }
 
     static constexpr int ROUNDS = 2;
+
+    static constexpr permutationType<8> IP = {2,6,3,1,4,8,5,7};
+    static constexpr permutationType<8> EXPANDED = {4,1,2,3,2,3,4,1};
+    static constexpr permutationType<4> SBOX_PERMUTATION = {2,4,3,1};
+    static constexpr permutationType<8> IP_1 = {4,1,3,5,7,2,8,6};
 
 public:
     static QString encode(const QString& text, const QString& key)
@@ -171,15 +203,17 @@ public:
         qDebug() << round1Key;
         QString round2Key = keyRound2(a,b, permutationType<8> {6,3,7,4,8,5,10,9});
         qDebug() << round2Key;
-        QString textPermut = textPermutation(text, permutationType<8> {3,7,2,1,5,8,6,4});
-        qDebug() << textPermut;
+        QString textPermut = textPermutation(text, IP);
+        qDebug() << "IP" << textPermut;
         QString encode = textPermut;
         for(int i{0}; i < ROUNDS; ++i)
         {
-            encode = Round(textPermut, i == 0 ? round1Key : round2Key);
-            qDebug() << encode;
+            qDebug() << "round text" << encode;
+            encode = Round(encode, i == 0 ? round1Key : round2Key, i);
+            qDebug() << "round result" << encode << "\n\n";
         }
-        QString result = textPermutation(encode, permutationType<8> {3,7,2,1,5,8,6,4});
+        QString result = textPermutation(encode, IP_1);
+        qDebug() << "encode text" << result;
         return "";
     }
 };

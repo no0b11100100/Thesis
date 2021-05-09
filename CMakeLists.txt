@@ -34,13 +34,16 @@ set(PROJECT_SOURCES
         controller.h
         Vigenere.h
         Permutation.h
-        rc4.h
+        RC4.h
         RSA.h
-        DES.h
+        SDES.h
         qml.qrc
         open.png
         close.png
         consts.h
+        FrequencyAnalysis.h
+        Steganography.h
+        utils.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
