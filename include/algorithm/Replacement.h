@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <QDebug>
 
-#include "include/common/consts.h"
+#include "../common/consts.h"
 
 namespace Algorithm
 {
@@ -16,11 +16,9 @@ struct Replacement
         QString result = text;
         std::transform(text.begin(), text.end(), result.begin(), [&](const QChar& c)
         {
-            bool isUpper = c.isUpper();
             auto index = std::find(UKRAINIAN_ALPHABET.cbegin(), UKRAINIAN_ALPHABET.cend(), c.toLower());
             auto newIndex = std::distance(UKRAINIAN_ALPHABET.cbegin(), index);
-            return isUpper ? UKRAINIAN_ALPHABET.at(newIndex).toUpper()
-                           : UKRAINIAN_ALPHABET.at(newIndex);
+            return permutationAlphabet.at(newIndex);
         });
 
         return result;

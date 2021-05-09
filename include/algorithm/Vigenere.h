@@ -5,8 +5,8 @@
 #include <algorithm>
 #include <QDebug>
 
-#include "include/common/consts.h"
-#include "include/common/utils.h"
+#include "../common/consts.h"
+#include "../common/utils.h"
 
 namespace Algorithm
 {
@@ -32,7 +32,7 @@ class Vigenere
         auto textIt = std::find(UKRAINIAN_ALPHABET.begin(), UKRAINIAN_ALPHABET.end(), textChar);
         auto secondIndex = std::distance(UKRAINIAN_ALPHABET.begin(), textIt);
 
-        return {firstIndex-1, secondIndex-1};
+        return {firstIndex, secondIndex};
     }
 
 public:

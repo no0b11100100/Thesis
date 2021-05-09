@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <QDebug>
 
-#include "include/common/consts.h"
+#include "../common/consts.h"
 
 namespace Algorithm
 {

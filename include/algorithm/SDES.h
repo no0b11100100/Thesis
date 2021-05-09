@@ -1,9 +1,9 @@
 #pragma once
 #include <QString>
 #include <array>
-#include "include/common/utils.h"
 #include <unordered_map>
 
+#include "../common/utils.h"
 // https://www.geeksforgeeks.org/data-encryption-standard-des-set-1/
 // https://github.com/MLuchette/SDES/blob/master/SDES.cpp
 namespace Algorithm

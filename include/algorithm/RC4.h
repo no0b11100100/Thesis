@@ -4,7 +4,8 @@
 #include <QDebug>
 #include <vector>
 #include <array>
-#include "include/common/utils.h"
+
+#include "../common/utils.h"
 
 namespace Algorithm
 {

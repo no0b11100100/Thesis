@@ -14,7 +14,6 @@ private:
     static QString makeEncode(const std::vector<QString>& table, const QStringList& permuationTable)
     {
         QStringList resultTable = permuationTable;
-        qDebug() << resultTable;
         int i = 0;
         for(const auto& column : permuationTable)
         {
@@ -36,7 +35,7 @@ private:
     {
         auto tableSize = text.size() % size == 0 ? text.size() / size : (text.size() / size) + 1;
         std::vector<QString> table;
-        qDebug() << tableSize << text;
+
         for(int i{0}, offset{0}; i < tableSize; ++i)
         {
             if(offset + size > text.size())
