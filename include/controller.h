@@ -1,10 +1,16 @@
 #pragma once
-#include "Replacement.h"
-#include "CaesarCipher.h"
-#include "Permutation.h"
-#include "consts.h"
 #include <QStringList>
 #include <QDebug>
+
+#include "include/common/consts.h"
+#include "include/algorithm/Replacement.h"
+#include "include/algorithm/CaesarCipher.h"
+#include "include/algorithm/Permutation.h"
+#include "include/algorithm/Replacement.h"
+#include "include/algorithm/Vigenere.h"
+#include "include/algorithm/SDES.h"
+#include "include/algorithm/RC4.h"
+#include "include/algorithm/RSA.h"
 
 using namespace Algorithm;
 
@@ -26,7 +32,7 @@ public:
                            AS_RC4,
                            AS_RSA,
                            AS_DES,
-                           "Стеганография"
+                           AS_STEGANOGRAPHY
                         };
     }
 
@@ -50,22 +56,25 @@ public:
         if(m_algorithmName == AS_CAESAR)
             return CaesarCipher::encode(text, key.toLongLong());
         else if(m_algorithmName == AS_VIGENERA)
-            return "AS_VIGENERA";
+            return Vigenere::encode(text, key);
         else if(m_algorithmName == AS_PERMUTATION)
-            return "AS_PERMUTATION";
+            return Permutation::encode(text, key);
         else if(m_algorithmName == AS_REPLACEMENT)
-            return "AS_REPLACEMENT";
+            return Replacement::encode(text, key);
         else if(m_algorithmName == AS_DES)
-            return "AS_DES";
+            return SDES::encode(text, key);
         else if(m_algorithmName == AS_RC4)
-            return "AS_RC4";
+            return RC4::encode(text, key);
         else if(m_algorithmName == AS_RSA)
-            return "AS_RSA";
+            return RSA::encode(text, key);
+        else if(m_algorithmName == AS_STEGANOGRAPHY)
+            return "AS_STEGANOGRAPHY";
 
         return "";
     }
 
-    Q_INVOKABLE QString getGenerateKey() {
+    Q_INVOKABLE QString getGenerateKey()
+    {
         return "invoke model getGenerateKey function";
     }
 

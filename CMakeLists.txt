@@ -29,21 +29,21 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick REQUIRED)
 
 set(PROJECT_SOURCES
         main.cpp
-        CaesarCipher.h
-        Replacement.h
-        controller.h
-        Vigenere.h
-        Permutation.h
-        RC4.h
-        RSA.h
-        SDES.h
-        qml.qrc
-        open.png
-        close.png
-        consts.h
-        FrequencyAnalysis.h
-        Steganography.h
-        utils.h
+        include/algorithm/CaesarCipher.h
+        include/algorithm/Replacement.h
+        include/controller.h
+        include/algorithm/Vigenere.h
+        include/algorithm/Permutation.h
+        include/algorithm/RC4.h
+        include/algorithm/RSA.h
+        include/algorithm/SDES.h
+        UI/qml.qrc
+        UI/icons/open.png
+        UI/icons/close.png
+        include/common/consts.h
+        include/algorithm/FrequencyAnalysis.h
+        include/algorithm/Steganography.h
+        include/common/utils.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

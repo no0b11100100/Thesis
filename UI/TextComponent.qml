@@ -25,7 +25,7 @@ Rectangle {
                         id: _button
                         text: headerModel[index]
                         font.pointSize: 14
-                        icon.source:  _button.isActive === true ? "open.png" : "close.png"
+                        icon.source:  _button.isActive === true ? "icons/open.png" : "icons/close.png"
                         icon.width: 10
                         icon.height: 10
                         background: Rectangle {

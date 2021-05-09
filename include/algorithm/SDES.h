@@ -1,7 +1,7 @@
 #pragma once
 #include <QString>
 #include <array>
-#include "utils.h"
+#include "include/common/utils.h"
 #include <unordered_map>
 
 // https://www.geeksforgeeks.org/data-encryption-standard-des-set-1/

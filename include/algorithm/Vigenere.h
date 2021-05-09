@@ -5,41 +5,32 @@
 #include <algorithm>
 #include <QDebug>
 
+#include "include/common/consts.h"
+#include "include/common/utils.h"
+
 namespace Algorithm
 {
 
-static QString alphabet = "abcdefghijklmnopqrstuvwxyz";
-
 class Vigenere
 {
-    static void nextPermutation(QString& text)
-    {
-        QChar firstElem = text.front();
-        for(auto i{0}; i < text.size()-1; ++i)
-            text[i] = text[i+1];
+    using TableType = std::array<QString, UKRAINIAN_ALPHABET_SIZE>;
 
-        text[text.size()-1] = firstElem;
-    }
-
-    static std::array<QString, 26> fillTable()
+    static TableType fillTable()
     {
-        std::array<QString, 26> result;
-        result[0] = alphabet;
-        for(int i{1}; i < alphabet.size(); ++i)
-        {
-            nextPermutation(alphabet);
-            result[i] = alphabet;
-        }
+        TableType result;
+        result[0] = UKRAINIAN_ALPHABET;
+        for(int i{1}; i < UKRAINIAN_ALPHABET_SIZE; ++i)
+            result[i] = Utils::cycleShift(result[i-1], Utils::ShiftDirection::Left);
 
         return result;
     }
 
     static std::pair<int, int> getIndexs(const QChar& textChar, const QChar& keyChar)
     {
-        auto keyIt = std::find(alphabet.begin(), alphabet.end(), keyChar);
-        auto firstIndex = std::distance(alphabet.begin(), keyIt);
-        auto textIt = std::find(alphabet.begin(), alphabet.end(), textChar);
-        auto secondIndex = std::distance(alphabet.begin(), textIt);
+        auto keyIt = std::find(UKRAINIAN_ALPHABET.begin(), UKRAINIAN_ALPHABET.end(), keyChar);
+        auto firstIndex = std::distance(UKRAINIAN_ALPHABET.begin(), keyIt);
+        auto textIt = std::find(UKRAINIAN_ALPHABET.begin(), UKRAINIAN_ALPHABET.end(), textChar);
+        auto secondIndex = std::distance(UKRAINIAN_ALPHABET.begin(), textIt);
 
         return {firstIndex-1, secondIndex-1};
     }

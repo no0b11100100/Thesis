@@ -4,8 +4,8 @@
 #include <QDebug>
 #include <vector>
 #include <array>
-#include "utils.h"
-// https://www.geeksforgeeks.org/implementation-of-rc4-algorithm/
+#include "include/common/utils.h"
+
 namespace Algorithm
 {
 

@@ -5,10 +5,26 @@ import MyModel 1.0
 
 Window {
     id: _root
-    width: _information.minimunWidth + _choice.width
+    width: 600//_information.minimunWidth + _choice.width
     height: 480
     color: "black"//"#222222"
     visible: true
+
+//    DropArea {
+//           id: dropArea;
+//           anchors.fill: parent
+//           onEntered: {
+//               _root.color = "gray";
+//               drag.accept (Qt.LinkAction);
+//           }
+//           onDropped: {
+//               console.log(drop.urls)
+//               _root.color = "white"
+//           }
+//           onExited: {
+//               _root.color = "white";
+//           }
+//       }
 
     minimumHeight: 400
     minimumWidth: _information.minimunWidth + _choice.width
