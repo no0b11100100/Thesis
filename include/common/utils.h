@@ -2,6 +2,7 @@
 #include <QString>
 #include <QDebug>
 #include <unordered_map>
+#include <cmath>
 
 class Utils
 {
@@ -90,4 +91,39 @@ public:
 //        qDebug() << result;
         return result;
     }
+
+    static size_t powMod(const size_t& number, const size_t& pow, const size_t& mod)
+    {
+        if(mod == 0) return 0;
+        if(pow == 0) return 1 % mod;
+        if(pow == 1) return number % mod;
+
+        auto countBits = [](const size_t& number) -> size_t
+        {
+            return static_cast<size_t>(log2(number));
+        };
+
+        size_t result{1};
+        size_t tempResult = number;
+        size_t _pow = pow;
+
+        while(_pow)
+        {
+            if(_pow == 1)
+            {
+                result = (result * number) % mod;
+                break;
+            }
+            size_t count = countBits(_pow);
+            for(size_t i{0}; i < count; ++i)
+                tempResult = (tempResult * tempResult) % mod;
+
+            _pow -= 1 << count;
+            result = (result * tempResult) % mod;
+            tempResult = std::move(number);
+        }
+
+        return result;
+    }
+
 };
