@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cmath>
 #include <QDebug>
+#include "../common/utils.h"
 
 namespace Algorithm
 {
@@ -58,39 +59,6 @@ class RSA
         return -1;
     }
 
-    static size_t fastPow(int number, int pow)
-    {
-
-        if(pow == 0) return 1;
-        if(pow == 1) return number;
-
-        static auto countBits = [](const size_t& number) -> size_t
-        {
-            return static_cast<size_t>(log2(number));
-        };
-
-        size_t result(1);
-        size_t tempResult = number;
-
-        while(pow)
-        {
-            if(pow == 1)
-            {
-                result *= number;
-                break;
-            }
-            size_t count = countBits(pow);
-            for(size_t i{0}; i < count; ++i)
-                tempResult *= tempResult;
-
-            pow -= 1 << count;
-            result *= tempResult;
-            tempResult = number;
-        }
-
-        return result;
-    }
-
 public:
 
     static QString encode(const QString& text, const QString& key)
@@ -105,7 +73,7 @@ public:
         for(const auto& symb : text)
         {
             auto s = symb.cell();
-            result += QString::number(fastPow(s, e) % n, 16);
+            result += QString::number(Utils::powMod(s,e,n), 16);
         }
         return result;
     }
