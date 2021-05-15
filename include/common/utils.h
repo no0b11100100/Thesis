@@ -7,7 +7,7 @@
 class Utils
 {
     template<class Iterator>
-    static QChar castHexOrOctalToBinary(Iterator& it, Iterator end)
+    static QChar hexToBinary(Iterator& it, Iterator end)
     {
         static const std::unordered_map<QString, QChar> fromBinaryTo
         {
@@ -62,7 +62,7 @@ public:
         QString result = "";
         for(auto it = binStr.crbegin(); it != binStr.crend();)
         {
-            QChar symbol = castHexOrOctalToBinary(it, binStr.crend());
+            QChar symbol = hexToBinary(it, binStr.crend());
             result.push_front(symbol);
         }
 

@@ -28,7 +28,6 @@ public:
                            AS_VIGENERA,
                            AS_PERMUTATION,
                            AS_REPLACEMENT,
-                           "Частотный анализ",
                            AS_RC4,
                            AS_RSA,
                            AS_DES,

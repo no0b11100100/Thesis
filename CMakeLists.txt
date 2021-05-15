@@ -42,7 +42,6 @@ set(PROJECT_SOURCES
         UI/icons/open.png
         UI/icons/close.png
         include/common/consts.h
-        include/algorithm/FrequencyAnalysis.h
         include/algorithm/Steganography.h
         include/common/utils.h
 )
