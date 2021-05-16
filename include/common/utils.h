@@ -3,6 +3,12 @@
 #include <QDebug>
 #include <unordered_map>
 #include <cmath>
+#include <QRegularExpression>
+#include <QRegularExpressionValidator>
+
+#include <algorithm>
+
+#include "consts.h"
 
 class Utils
 {
@@ -126,4 +132,22 @@ public:
         return result;
     }
 
+    static bool validateString(QString text, const QString& re)
+    {
+        QRegularExpression regexp(re);
+        QRegularExpressionValidator v(regexp, 0);
+        int pos = 0;
+        qDebug() << v.validate(text,pos);
+        return v.validate(text,pos) == QValidator::Acceptable;
+    }
+
+    static bool validateStringList(const QStringList& list)
+    {
+        int size = list.size();
+        if(size == 4 || size == 8 || size == 10)
+            return std::is_permutation(list.cbegin(), list.cend(),
+                                   size == 4 ? PERMUTATION_4.cbegin() :
+                                   size == 8 ? PERMUTATION_8.cbegin() : PERMUTATION_10.cbegin());
+        return false;
+    }
 };

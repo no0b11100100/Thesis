@@ -19,6 +19,7 @@ class RSA
     static InputPrimeNumbers parseKey(const QString& key)
     {
         auto values = key.split(' ');
+        qDebug() << values.size();
         return {values[0].toInt(), values[1].toInt()};
     }
 
@@ -59,10 +60,24 @@ class RSA
         return -1;
     }
 
+    static bool validateKey(const QString& key)
+    {
+        if(!Utils::validateString(key, ONLY_NUMBERS_RE))
+                return false;
+
+        auto values = key.split(' ');
+        if(values.size() != 2) return false;
+
+        return true;
+    }
+
 public:
 
     static QString encode(const QString& text, const QString& key)
     {
+        if(!validateKey(key) || !!Utils::validateString(text, ONLY_ENGLISH_LETTERS))
+            return "";
+
         auto [P, Q] = parseKey(key);
         auto n = P*Q;
         auto U = EulerFuntion(P, Q);

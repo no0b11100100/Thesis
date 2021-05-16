@@ -4,6 +4,8 @@
 #include <QDebug>
 #include <QPixmap>
 
+#include "../common/utils.h"
+
 class Steganography
 {
     static QString stringToByte(QString str)
@@ -20,6 +22,9 @@ class Steganography
 public:
     static void encode(const QString& path, const QString& text)
     {
+//        if(!Utils::validateString(text, ONLY_UKRAINIAN_LETTERS))
+//            return;
+
         QPixmap pixmap(path);
         QImage image = pixmap.toImage();
         QColor c = image.pixel(5,5);
@@ -68,7 +73,7 @@ public:
         }
     }
 
-    static QString decode()
+    static QString decode(const QString& firstPath, const QString& secondPath)
     {
         QString encode = "/home/drago/Desktop/C++/Thesis/Thesis/encode.png";
         QString normal = "/home/drago/Desktop/C++/Thesis/Thesis/close1.png";

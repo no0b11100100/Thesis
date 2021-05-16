@@ -5,14 +5,25 @@
 #include <QDebug>
 
 #include "../common/consts.h"
+#include "../common/utils.h"
 
 namespace Algorithm
 {
 
-struct Replacement
+class Replacement
 {
+    static bool validateKey(const QString& key)
+    {
+        return std::is_permutation(key.cbegin(), key.cend(), UKRAINIAN_ALPHABET.cbegin());
+    }
+
+public:
+
     static QString encode(const QString& text, const QString& permutationAlphabet)
     {
+        if(!validateKey(permutationAlphabet) || !Utils::validateString(text, ONLY_UKRAINIAN_LETTERS))
+            return "";
+
         QString result = text;
         std::transform(text.begin(), text.end(), result.begin(), [&](const QChar& c)
         {

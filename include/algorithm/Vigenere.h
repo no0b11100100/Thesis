@@ -38,6 +38,9 @@ class Vigenere
 public:
     static QString encode(const QString& text, const QString& key)
     {
+        if(!Utils::validateString(text, ONLY_UKRAINIAN_LETTERS) || !Utils::validateString(text, ONLY_UKRAINIAN_LETTERS))
+            return "";
+
         auto table = fillTable();
         auto encodeText = text;
         auto it = key.cbegin();

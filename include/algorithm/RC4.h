@@ -60,6 +60,9 @@ public:
         KeyType plainText = {'H', 'E', 'L', 'L', 'O', 'W', 'O', 'R', 'L', 'D'};
         KeyType key = {1,2,3,4,5,6,7,8};
 
+        if(!Utils::validateString(text, ONLY_ENGLISH_LETTERS))
+            return "";
+
         auto S = makeS();
         KSA(S, key);
         KeyType result;

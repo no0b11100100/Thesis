@@ -2,6 +2,8 @@
 #include <QStringList>
 #include <QDebug>
 
+#include <thread>
+
 #include "include/common/consts.h"
 #include "include/algorithm/Replacement.h"
 #include "include/algorithm/CaesarCipher.h"
@@ -51,9 +53,10 @@ public:
 
     Q_INVOKABLE QString encode(const QString& text, const QString& key)
     {
+        std::thread();
         qDebug() << "ENCODING DATA " << text << key << " ALGO " << m_algorithmName;
         if(m_algorithmName == AS_CAESAR)
-            return CaesarCipher::encode(text, key.toLongLong());
+            return CaesarCipher::encode(text, key);
         else if(m_algorithmName == AS_VIGENERA)
             return Vigenere::encode(text, key);
         else if(m_algorithmName == AS_PERMUTATION)

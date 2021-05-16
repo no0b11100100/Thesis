@@ -5,6 +5,8 @@
 #include <QRegularExpression>
 #include <vector>
 
+#include "../common/utils.h"
+
 namespace Algorithm
 {
 
@@ -56,10 +58,23 @@ private:
         return table;
     }
 
+    static bool validateKey(QStringList key)
+    {
+        std::sort(key.begin(), key.end());
+        if(key.isEmpty() || key.back().toInt() != key.size()) return false;
+        for(auto it = key.cbegin(); it != std::prev(key.cend()); ++it)
+            if(it->toInt()+1 != std::next(it)->toInt())
+                return false;
+
+        return true;
+    }
+
 public:
     static QString encode(const QString& text, const QString& key)
     {
         auto keyTable = key.split(QString(","));
+        if(!validateKey(keyTable) || !Utils::validateString(text, ONLY_UKRAINIAN_LETTERS))
+            return "";
         int columnCount = keyTable.size();
         auto result = text;
         result.replace(QRegularExpression("\\s+"), QString());
