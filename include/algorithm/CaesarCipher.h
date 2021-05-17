@@ -27,7 +27,7 @@ public:
     static QString encode(const QString& text, const QString& offset)
     {
         if(!validateKey(offset) || !Utils::validateString(text, ONLY_UKRAINIAN_LETTERS))
-            return "";
+            return "error";
 
         QString result = text;
         int key = offset.toUInt();

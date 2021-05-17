@@ -32,6 +32,10 @@ Window {
 
     Controller {
         id: _model
+
+        Component.onCompleted: {
+            console.log("labels", _model.labelsName)
+        }
     }
 
     Row {
@@ -53,7 +57,7 @@ Window {
             id: _information
             width: _root.width - _choice.width
             height: _root.height
-            model: _model
+            mainModel: _model
 
             Component.onCompleted: {
                 console.log(width)
