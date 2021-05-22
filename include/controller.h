@@ -32,22 +32,12 @@ class Controller : public QObject {
     QStringList m_labelsName;
     QStringList m_buttonsName;
 
-    QString generateKey()
-    {
-        return "key";
-    }
-
-    QString theory()
-    {
-        return QString();
-    }
-
     void updateControls()
     {
         if(m_algorithmName == AS_CAESAR)
         {
             m_labelsName = QStringList{TEXT, KEY, RESULT};
-            m_buttonsName = QStringList{GENERATE_KEY, ENCODE, THEORY};
+            m_buttonsName = QStringList{GENERATE_KEY, ENCODE, DECODE, THEORY};
         }
         else if(m_algorithmName == AS_VIGENERA)
         {
@@ -57,12 +47,12 @@ class Controller : public QObject {
         else if(m_algorithmName == AS_PERMUTATION)
         {
             m_labelsName = QStringList{TEXT, KEY, RESULT};
-            m_buttonsName = QStringList{GENERATE_KEY, ENCODE, THEORY};
+            m_buttonsName = QStringList{GENERATE_KEY, ENCODE, DECODE, THEORY};
         }
         else if(m_algorithmName == AS_REPLACEMENT)
         {
             m_labelsName = QStringList{TEXT, KEY, RESULT};
-            m_buttonsName = QStringList{GENERATE_KEY, ENCODE, THEORY};
+            m_buttonsName = QStringList{GENERATE_KEY, ENCODE, DECODE, THEORY};
         }
         else if(m_algorithmName == AS_SDES)
         {
@@ -91,6 +81,46 @@ class Controller : public QObject {
         }
     }
 
+    void encode(const QString& text, const QString& key)
+    {
+        qDebug() << "ENCODING DATA " << text << key << " ALGO " << m_algorithmName;
+        QString result = "";
+        if(m_algorithmName == AS_CAESAR)
+            result = CaesarCipher::encode(text, key);
+        else if(m_algorithmName == AS_VIGENERA)
+            result = Vigenere::encode(text, key);
+        else if(m_algorithmName == AS_PERMUTATION)
+            result = Permutation::encode(text, key);
+        else if(m_algorithmName == AS_REPLACEMENT)
+            result = Replacement::encode(text, key);
+        else if(m_algorithmName == AS_SDES)
+            result = SDES::encode(text, key);
+        else if(m_algorithmName == AS_RC4)
+            result = RC4::encode(text, key);
+        else if(m_algorithmName == AS_RSA)
+            result = RSA::encode(text, key);
+        else if(m_algorithmName == AS_STEGANOGRAPHY){}
+//            "AS_STEGANOGRAPHY";
+
+        for(auto& label : m_labelsName)
+            if(label == RESULT)
+                label = result;
+    }
+
+    void decode(const QString& text, const QString& key)
+    {
+        qDebug() << "DECODING DATA " << text << key << " ALGO " << m_algorithmName;
+        if(m_algorithmName == AS_CAESAR)
+            CaesarCipher::encode(text, key);
+        else if(m_algorithmName == AS_VIGENERA)
+            Vigenere::encode(text, key);
+        else if(m_algorithmName == AS_PERMUTATION)
+            Permutation::encode(text, key);
+        else if(m_algorithmName == AS_REPLACEMENT)
+            Replacement::encode(text, key);
+        else if(m_algorithmName == AS_STEGANOGRAPHY)
+        {}
+    }
 signals:
     void algorithmNameChanged();
 //    void textChanged();
@@ -128,29 +158,6 @@ public:
         return QStringList{"", "", ""};
     }
 
-    Q_INVOKABLE QString encode(const QString& text, const QString& key)
-    {
-        qDebug() << "ENCODING DATA " << text << key << " ALGO " << m_algorithmName;
-        if(m_algorithmName == AS_CAESAR)
-            return CaesarCipher::encode(text, key);
-        else if(m_algorithmName == AS_VIGENERA)
-            return Vigenere::encode(text, key);
-        else if(m_algorithmName == AS_PERMUTATION)
-            return Permutation::encode(text, key);
-        else if(m_algorithmName == AS_REPLACEMENT)
-            return Replacement::encode(text, key);
-        else if(m_algorithmName == AS_SDES)
-            return SDES::encode(text, key);
-        else if(m_algorithmName == AS_RC4)
-            return RC4::encode(text, key);
-        else if(m_algorithmName == AS_RSA)
-            return RSA::encode(text, key);
-        else if(m_algorithmName == AS_STEGANOGRAPHY)
-            return "AS_STEGANOGRAPHY";
-
-        return "";
-    }
-
     Q_INVOKABLE QString getGenerateKey()
     {
         return "invoke model getGenerateKey function";
@@ -165,6 +172,14 @@ public:
         updateControls();
         emit algorithmNameChanged();
         qDebug() << m_algorithmName << m_labelsName;
+    }
+
+    Q_INVOKABLE void triggerButton(const QString& action, const QString& text, const QString& key)
+    {
+        if(action == ENCODE)
+            encode(text, key);
+        else if(action == DECODE)
+            decode(text, key);
     }
 };
 

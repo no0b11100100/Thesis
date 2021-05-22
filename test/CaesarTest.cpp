@@ -14,8 +14,19 @@ TEST(CaesarCipher, EncodeTest)
     expected = "а";
     EXPECT_EQ(res, expected);
 
-    res = Algorithm::CaesarCipher::encode("Криптографія", "1");
-    expected = "лсірупґсбхїа";
+//    res = Algorithm::CaesarCipher::encode("Криптографія", "1");
+//    expected = "лсірупґсбхїа";
+//    EXPECT_EQ(res, expected);
+}
+
+TEST(CaesarCipher, DecodeTest)
+{
+    QString res = Algorithm::CaesarCipher::decode("а", "1");
+    QString expected = "я";
+    EXPECT_EQ(res, expected);
+
+    res = Algorithm::CaesarCipher::decode("я", "3");
+    expected = "щ";
     EXPECT_EQ(res, expected);
 }
 

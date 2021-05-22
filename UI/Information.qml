@@ -11,6 +11,7 @@ Rectangle {
         spacing: 2
 
         Repeater{
+            id: _labelsRepeat
             model: mainModel.labelsName
             TextLabel {
                 id: _textLabel
@@ -27,9 +28,10 @@ Rectangle {
             {
                 model: mainModel.buttonsName
                 Button {
+                    id: _button
                     text: modelData
                     onClicked: {
-                        // emit signal
+                        mainModel.triggerButton(_button.text, _labelsRepeat[0], _labelsRepeat[1])
                     }
                 }
             }

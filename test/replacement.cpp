@@ -10,3 +10,11 @@ TEST(Replacement, EncodeTest)
     QString expected = "фцєхервцчайп";
     EXPECT_EQ(res, expected);
 }
+
+
+TEST(Replacement, DecodeTest)
+{
+    QString res = Algorithm::Replacement::decode("фцєхервцчайп", "чжбвкюзгґсєйиуфлітрхцденаїяшмщьоп");
+    QString expected = "криптографія";
+    EXPECT_EQ(res, expected);
+}

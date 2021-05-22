@@ -13,6 +13,19 @@ namespace Algorithm
 struct Permutation
 {
 private:
+
+    static void makePermutation(QString& text, const QStringList& permutation)
+    {
+        QString temp; // рмпие
+//        qDebug() << text;
+        for(const auto& index : permutation)
+        {
+            temp += text[index.toInt()-1];
+        }
+
+        text = std::move(temp);
+    }
+
     static QString makeEncode(const std::vector<QString>& table, const QStringList& permuationTable)
     {
         QStringList resultTable = permuationTable;
@@ -33,26 +46,97 @@ private:
         return resultTable.join(QString());
     }
 
-    static std::vector<QString> maketable(const QString& text, const int& size)
+    static QString makeDecode(const std::vector<QString>& table, const QStringList& permuationTable)
     {
-        auto tableSize = text.size() % size == 0 ? text.size() / size : (text.size() / size) + 1;
-        std::vector<QString> table;
+        qDebug() << "table";
+        for(auto v : table)
+            qDebug() << v;
 
-        for(int i{0}, offset{0}; i < tableSize; ++i)
+        qDebug() << "end table";
+
+        QString result = "";
+
+        for(int i{0}; i < table.at(0).size(); ++i)
         {
-            if(offset + size > text.size())
+            QString tmp;
+            for(const auto& row : table)
             {
-                auto rest = std::distance(std::next(text.begin() + offset), text.end())+1;
-                QString tmp = text.mid(offset, rest);
-                for(int j{0}; j < (size-rest); ++j)
-                    tmp += " ";
-                table.push_back(tmp);
+                tmp += row[i];
             }
-            else
+            makePermutation(tmp, permuationTable);
+            qDebug() << tmp;
+            result += tmp;
+        }
+
+        qDebug() << result;
+        return result;
+    }
+
+    static std::vector<QString> makeEncodeTable(const QString& text, const int& size, const int& chanSize)
+    {
+        QString default_value(chanSize, QChar(' '));
+        std::vector<QString> table(size, default_value);
+
+        for(int i{0}, offset{0}; i < size; ++i)
+        {
+            if(offset + chanSize > text.size())
             {
-                table.push_back(text.mid(offset, size));
-                offset += size;
+                int rest = (offset + chanSize) - text.size();
+                table.at(i) = text.mid(offset, chanSize) + QString(rest, QChar(' '));
+            } else {
+                table.at(i) = (text.mid(offset, chanSize));
+                offset += chanSize;
             }
+        }
+
+        for(auto v : table)
+            qDebug() << v;
+
+        return table;
+    }
+
+    static std::vector<QString> makeDecodeTable(const QString& text, const int& keyLegth, const QStringList& key)
+    {
+        int stringSize = 0;
+        int startSpaceColumns = -1;
+
+        if(int ratio = (text.size() / keyLegth); text.size() % keyLegth == 0)
+        {
+            stringSize = ratio;
+        } else
+        {
+            stringSize = ratio + 1;
+            startSpaceColumns = text.size() - (keyLegth * ratio);
+        }
+
+        QString default_value(stringSize, QChar(' '));
+        std::vector<QString> table(keyLegth, default_value);
+
+//        qDebug() << key;
+
+        for(int i{0}, offset{0}; i < keyLegth; ++i)
+        {
+//            qDebug() << "i" << i+1;
+            if(startSpaceColumns != -1)
+            {
+                auto it = std::find(key.cbegin(), key.cend(), QString::number(i+1));
+//                qDebug() << "startSpaceColumns != -1" << (it == key.cend()) << "distance" << std::distance(key.cbegin(), it);
+                if(startSpaceColumns <= std::distance(key.cbegin(), it))
+                {
+                    table.at(i) = (text.mid(offset, stringSize-1)) + ' ';
+                    offset += stringSize-1;
+//                    qDebug() << "if" << table.at(i);
+                } else
+                {
+                    table.at(i) = (text.mid(offset, stringSize));
+                    offset += stringSize;
+                }
+            } else
+            {
+                table.at(i) = (text.mid(offset, stringSize));
+                offset += stringSize;
+            }
+//            qDebug() << table.at(i);
         }
 
         return table;
@@ -73,13 +157,24 @@ public:
     static QString encode(const QString& text, const QString& key)
     {
         auto keyTable = key.split(QString(","));
-        if(!validateKey(keyTable) || !Utils::validateString(text, ONLY_UKRAINIAN_LETTERS))
-            return "";
-        int columnCount = keyTable.size();
+//        if(!validateKey(keyTable) || !Utils::validateString(text, ONLY_UKRAINIAN_LETTERS))
+//            return "";
         auto result = text;
         result.replace(QRegularExpression("\\s+"), QString());
+        int size = text.size() %  keyTable.size() == 0 ? text.size() /  keyTable.size() : (text.size() /  keyTable.size()) + 1;
 
-        return makeEncode(maketable(result, columnCount), keyTable);
+        return makeEncode(makeEncodeTable(result, size, keyTable.size()), keyTable);
+    }
+
+    static QString decode(const QString& text, const QString& key)
+    {
+        auto keyTable = key.split(QString(","));
+        // TODO: add validation
+        auto result = text;
+        qDebug() << "text" << result;
+        result.replace(QRegularExpression("\\s+"), QString());
+
+        return makeDecode(makeDecodeTable(result, keyTable.size(), keyTable), keyTable);
     }
 };
 
