@@ -38,8 +38,8 @@ class Vigenere
 public:
     static QString encode(const QString& text, const QString& key)
     {
-        if(!Utils::validateString(text, ONLY_UKRAINIAN_LETTERS) || !Utils::validateString(text, ONLY_UKRAINIAN_LETTERS))
-            return "";
+//        if(!Utils::validateString(text, ONLY_UKRAINIAN_LETTERS) || !Utils::validateString(text, ONLY_UKRAINIAN_LETTERS))
+//            return "";
 
         auto table = fillTable();
         auto encodeText = text;
@@ -55,6 +55,33 @@ public:
 
         return encodeText;
     }
+
+    static QString decode(const QString& text, const QString& key)
+    {
+        auto table = fillTable();
+        auto encodeText = text;
+        auto it = key.cbegin();
+
+        auto getIndex = [](const QString& alphabet, const QChar& c) -> int
+        {
+            return std::distance(alphabet.cbegin(), std::find(alphabet.cbegin(), alphabet.cend(), c));
+        };
+
+        std::transform(encodeText.begin(), encodeText.end(), encodeText.begin(), [&](const QChar& c)
+        {
+            if(it == key.cend()) it = key.cbegin();
+            int rowIndex = getIndex(UKRAINIAN_ALPHABET, it->toLower());
+            auto row = table.at(rowIndex);
+//            qDebug() << it->toLower() << row;
+            auto index = getIndex(row, c.toLower());
+            ++it;
+//            qDebug() << index;
+            return UKRAINIAN_ALPHABET.at(index);
+        });
+
+        return encodeText;
+    }
+
 };
 
 } // namespace Algorithm

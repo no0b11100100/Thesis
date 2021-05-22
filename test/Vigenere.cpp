@@ -10,3 +10,10 @@ TEST(Vigenere, EncodeTest)
     QString expected = "шюіхзпзщпьхя";
     EXPECT_EQ(res, expected);
 }
+
+TEST(Vigenere, DecodeTest)
+{
+    QString res = Algorithm::Vigenere::decode("шюіхзпзщпьхя", "Кібербезпека");
+    QString expected = "криптографія";
+    EXPECT_EQ(res, expected);
+}
