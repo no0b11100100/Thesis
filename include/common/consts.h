@@ -48,7 +48,8 @@ const QString RESULT = "Результат";
 const QString ENCODING = "Шифрування";
 const QString DECODING = "Розшифрування";
 const QString VIGENERE_TABLE = "Формування таблиці Віженера";
-
+const QString MAKE_S_RC4 = "Формування таблиці S";
+const QString MAKE_KSA = "KSA";
 
 /*Text formating*/
 const QString TAB = "    ";

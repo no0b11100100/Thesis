@@ -6,6 +6,7 @@
 #include <array>
 
 #include "../common/utils.h"
+#include "../common/consts.h"
 
 namespace Algorithm
 {
@@ -14,7 +15,7 @@ struct RC4
 {
 private:
 
-    using Byte = unsigned char;
+    using Byte = QChar;
     using SType = std::array<Byte, 256>;
     using KeyType = std::vector<Byte>;
 
@@ -22,12 +23,14 @@ private:
 
     static void Swap(Byte* a, Byte* b);
 
-    static void KSA(SType& S, const KeyType& key);
+    static void KSA(SType& S, const QString& key);
 
     static Byte PRGA(SType& S);
 
+    static Description::Description m_description;
+
 public:
-    static QString encode(const QString& text, const QString&);
+    static ReturnType encode(const QString&, const QString&);
 };
 
 } // namespace Algorithm
