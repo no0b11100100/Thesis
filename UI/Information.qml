@@ -6,6 +6,10 @@ Rectangle {
     property variant mainModel
     id: _root
 
+    Loader{
+        id: _loader
+    }
+
     Column {
         id: _column
         spacing: 2
@@ -27,11 +31,19 @@ Rectangle {
             Repeater
             {
                 model: mainModel.buttonsName
+
                 Button {
                     id: _button
                     text: modelData
                     onClicked: {
-                        mainModel.triggerButton(_button.text, _labelsRepeat[0], _labelsRepeat[1])
+                         _loader.source = ""
+                        if(_button.text === "Теорія")
+                        {
+                            _loader.source = "qrc:/UI/TheoryWindow.qml"
+                            console.log("pressed")
+                        }
+                        else
+                            mainModel.triggerButton(_button.text, _labelsRepeat[0], _labelsRepeat[1])
                     }
                 }
             }
@@ -40,7 +52,8 @@ Rectangle {
         TextComponent {
             id: _details
             width: _root.width - 2
-            height: _root.height - _row.height //- _resultLabel.height*3 - 8
+            // TODO: fix
+            height: _root.height - _row.height - 150 //- _resultLabel.height*3 - 8
             headerModel: mainModel.headerText()//["1", "2", "3", "4"]
             contentModel: mainModel.contetntText()//["ыалдфдталоыварвыоипловытмлдвыопршщуаошлвыдоасьлодвыаошукрашовлыатсамлдвыаьловыптмловмтвыбтлд", "ыалдфдталоыварвыоипловытмлдвыопршщуаошлвыдоасьлодвыаошукрашовлыатсамлдвыаьловыптмловмтвыбтлд", "ыалдфдталоыварвыоипловытмлдвыопршщуаошлвыдоасьлодвыаошукрашовлыатсамлдвыаьловыптмловмтвыбтлд", "ыалдфдталоыварвыоипловытмлдвыопршщуаошлвыдоасьлодвыаошукрашовлыатсамлдвыаьловыптмловмтвыбтлд"]
         } // TextComponent
