@@ -4,8 +4,7 @@
 #include <unordered_map>
 
 #include "../common/utils.h"
-// https://www.geeksforgeeks.org/data-encryption-standard-des-set-1/
-// https://github.com/MLuchette/SDES/blob/master/SDES.cpp
+
 namespace Algorithm
 {
 
@@ -34,7 +33,7 @@ class SDES
 
     static std::tuple<QString, QString> generateKey(const QString& key, const permutationType<10>& permutation)
     {
-        QString expandedKey = '1' + key + '1';
+        QString expandedKey = key;
         makePermautation<10>(expandedKey, permutation);
         return divideIntoTwoParts(expandedKey);
     }
@@ -194,15 +193,19 @@ class SDES
     static constexpr permutationType<4> SBOX_PERMUTATION = {2,4,3,1};
     static constexpr permutationType<8> IP_1 = {4,1,3,5,7,2,8,6};
 
+
+    /*key permutations*/
+    static constexpr permutationType<10> P_10 = {3,5,2,7,4,10,1,9,8,6};
+    static constexpr permutationType<8> P_8 = {6,3,7,4,8,5,10,9};
 public:
     static QString encode(const QString& text, const QString& key)
     {
-        auto [a,b] = generateKey(key, permutationType<10> {3,5,2,7,4,10,1,9,8,6});
+        auto [a,b] = generateKey(key, P_10);
         qDebug() << a << b;
-        QString round1Key = keyRound1(a,b, permutationType<8> {6,3,7,4,8,5,10,9});
-        qDebug() << round1Key;
-        QString round2Key = keyRound2(a,b, permutationType<8> {6,3,7,4,8,5,10,9});
-        qDebug() << round2Key;
+        QString round1Key = keyRound1(a,b, P_8);
+        qDebug() << "key1" << round1Key;
+        QString round2Key = keyRound2(a,b, P_8);
+        qDebug() << "key2" << round2Key;
         QString textPermut = textPermutation(text, IP);
         qDebug() << "IP" << textPermut;
         QString encode = textPermut;
@@ -214,7 +217,7 @@ public:
         }
         QString result = textPermutation(encode, IP_1);
         qDebug() << "encode text" << result;
-        return "";
+        return result;
     }
 };
 

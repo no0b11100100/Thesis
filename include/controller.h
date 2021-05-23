@@ -2,9 +2,8 @@
 #include <QStringList>
 #include <QDebug>
 #include <QVector>
-#include <QPair>
 
-#include <functional>
+#include <memory>
 
 #include "include/common/consts.h"
 
@@ -31,6 +30,7 @@ class Controller : public QObject {
     QString m_algorithmName = algorithmList().first();
     QStringList m_labelsName;
     QStringList m_buttonsName;
+    Description::Description m_description;
 
     void updateControls()
     {
@@ -86,13 +86,13 @@ class Controller : public QObject {
         qDebug() << "ENCODING DATA " << text << key << " ALGO " << m_algorithmName;
         QString result = "";
         if(m_algorithmName == AS_CAESAR)
-            result = CaesarCipher::encode(text, key);
+            std::tie(result, m_description) = CaesarCipher::encode(text, key);
         else if(m_algorithmName == AS_VIGENERA)
             result = Vigenere::encode(text, key);
         else if(m_algorithmName == AS_PERMUTATION)
             result = Permutation::encode(text, key);
         else if(m_algorithmName == AS_REPLACEMENT)
-            result = Replacement::encode(text, key);
+            std::tie(result, m_description) = Replacement::encode(text, key);
         else if(m_algorithmName == AS_SDES)
             result = SDES::encode(text, key);
         else if(m_algorithmName == AS_RC4)
@@ -111,13 +111,13 @@ class Controller : public QObject {
     {
         qDebug() << "DECODING DATA " << text << key << " ALGO " << m_algorithmName;
         if(m_algorithmName == AS_CAESAR)
-            CaesarCipher::encode(text, key);
+            CaesarCipher::decode(text, key);
         else if(m_algorithmName == AS_VIGENERA)
-            Vigenere::encode(text, key);
+            Vigenere::decode(text, key);
         else if(m_algorithmName == AS_PERMUTATION)
-            Permutation::encode(text, key);
+            Permutation::decode(text, key);
         else if(m_algorithmName == AS_REPLACEMENT)
-            Replacement::encode(text, key);
+            Replacement::decode(text, key);
         else if(m_algorithmName == AS_STEGANOGRAPHY)
         {}
     }
@@ -128,10 +128,12 @@ signals:
 public:
 
     Controller(QObject* parent = nullptr)
-        : QObject{parent}
-
+        : QObject{parent},
+          m_description{Description::Description()}
     {
         updateControls();
+        std::tie(std::ignore, m_description) = //Algorithm::CaesarCipher::encode("Криптографія", "1");
+                    Algorithm::CaesarCipher::decode("лсірупґсбхїа", "1");
     }
 
     Q_INVOKABLE QStringList algorithmList()
@@ -149,13 +151,12 @@ public:
 
     Q_INVOKABLE QStringList headerText()
     {
-        return QStringList{"1", "2", "3"};
+        return m_description.GetHeaders();
     }
 
-    // TODO: details
     Q_INVOKABLE QStringList contetntText()
     {
-        return QStringList{"", "", ""};
+        return m_description.GetContents();
     }
 
     Q_INVOKABLE QString getGenerateKey()
@@ -171,6 +172,7 @@ public:
         m_algorithmName = name;
         updateControls();
         emit algorithmNameChanged();
+//        m_description.Clear();
         qDebug() << m_algorithmName << m_labelsName;
     }
 
@@ -180,6 +182,8 @@ public:
             encode(text, key);
         else if(action == DECODE)
             decode(text, key);
+
+//        emit algorithmNameChanged();
     }
 };
 

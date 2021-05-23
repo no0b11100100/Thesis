@@ -38,12 +38,23 @@ set(PROJECT_SOURCES
         include/algorithm/RC4.h
         include/algorithm/RSA.h
         include/algorithm/SDES.h
+        include/algorithm/Steganography.h
+
+        include/algorithm/CaesarCipher.cpp
+        include/algorithm/Replacement.cpp
+        include/algorithm/Vigenere.cpp
+        include/algorithm/Permutation.cpp
+        include/algorithm/RC4.cpp
+        include/algorithm/RSA.cpp
+        include/algorithm/SDES.cpp
+        include/algorithm/Steganography.cpp
+
         UI/qml.qrc
         UI/icons/open.png
         UI/icons/close.png
         include/common/consts.h
-        include/algorithm/Steganography.h
         include/common/utils.h
+        include/Description.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

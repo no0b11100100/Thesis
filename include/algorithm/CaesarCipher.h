@@ -9,67 +9,21 @@
 #include "../common/consts.h"
 #include "../common/utils.h"
 
+#include "../Description.h"
+
 namespace Algorithm
 {
 
 class CaesarCipher
 {
-    static bool validateKey(const QString& key)
-    {
-        int intKey = key.toInt();
-        if(intKey > UKRAINIAN_ALPHABET_SIZE || intKey < 0)
-            return false;
+    static bool validateKey(const QString& key);
 
-        return true;
-    }
+    static Description::Description m_description;
 
 public:
-    static QString encode(const QString& text, const QString& offset)
-    {
-        if(!validateKey(offset) || !Utils::validateString(text, ONLY_UKRAINIAN_LETTERS))
-            return "error";
+    static ReturnType encode(const QString& text, const QString& offset);
 
-        QString result = text;
-        int key = offset.toUInt();
-        std::transform(text.begin(), text.end(), result.begin(), [&](const QChar& c) -> QChar
-        {
-            auto it_c = std::find(UKRAINIAN_ALPHABET.cbegin(), UKRAINIAN_ALPHABET.cend(), c.toLower());
-            auto index = std::distance(UKRAINIAN_ALPHABET.cbegin(), it_c);
-            unsigned newIndex = index + key;
-            if(newIndex < UKRAINIAN_ALPHABET_SIZE)
-                return UKRAINIAN_ALPHABET[newIndex];
-            else {
-                return UKRAINIAN_ALPHABET[newIndex - UKRAINIAN_ALPHABET_SIZE];
-            }
-        });
-
-        qDebug() << "result" << result;
-
-        return result;
-    }
-
-    static QString decode(const QString& text, const QString& offset)
-    {
-        if(!validateKey(offset) || !Utils::validateString(text, ONLY_UKRAINIAN_LETTERS))
-            return "error";
-
-        QString result = text;
-        int key = offset.toUInt();
-        std::transform(text.begin(), text.end(), result.begin(), [&](const QChar& c) -> QChar
-        {
-            auto it_c = std::find(UKRAINIAN_ALPHABET.cbegin(), UKRAINIAN_ALPHABET.cend(), c.toLower());
-            auto index = std::distance(UKRAINIAN_ALPHABET.cbegin(), it_c);
-            int newIndex = index - key;
-            qDebug() << "index" << newIndex;
-            if(newIndex >= 0)
-                return UKRAINIAN_ALPHABET[newIndex];
-            else {
-                return UKRAINIAN_ALPHABET[UKRAINIAN_ALPHABET_SIZE + newIndex];
-            }
-        });
-
-        return result;
-    }
+    static ReturnType decode(const QString& text, const QString& offset);
 };
 
 } // namespace Algorithm

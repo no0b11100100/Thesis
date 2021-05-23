@@ -134,11 +134,14 @@ public:
 
     static bool validateString(QString text, const QString& re)
     {
-        QRegularExpression regexp(re);
-        QRegularExpressionValidator v(regexp, 0);
-        int pos = 0;
-        qDebug() << v.validate(text,pos);
-        return v.validate(text,pos) == QValidator::Acceptable;
+        QRegExp regex(re);
+        //regex.setPatternSyntax(QRegExp::Wildcard);
+        return regex.exactMatch(text);
+//        QRegularExpressionValidator v(regexp, 0);
+//        int pos = 0;
+//        auto res = v.validate(text,pos);
+//        qDebug() << res;
+//        return res == QValidator::Acceptable;
     }
 
     static bool validateStringList(const QStringList& list)

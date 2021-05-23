@@ -1,6 +1,10 @@
 #pragma once
 #include <QString>
 #include <QStringList>
+#include "../Description.h"
+
+/*Alias*/
+using ReturnType = std::tuple<QString, Description::Description>;
 
 /*Algorithm names*/
 const QString AS_CAESAR = "Алгоритм Цезаря";
@@ -31,11 +35,15 @@ const QStringList PERMUTATION_10 = {"1", "2", "3", "4", "5", "6", "7", "8", "9",
 
 /*Buttons text*/
 const QString GENERATE_KEY = "Сгенерувать ключ";
-const QString ENCODE = "Закодувати";
-const QString DECODE = "Розкодувати";
+const QString ENCODE = "Зашифрувати";
+const QString DECODE = "Розшифрувати";
 const QString THEORY = "Теорія";
 
 /*Labels text*/
 const QString TEXT = "Введіть текст";
 const QString KEY = "Введіть ключ";
 const QString RESULT = "Результат";
+
+/*Description headers names*/
+const QString ENCODING = "Шифрування";
+const QString DECODING = "Розшифрування";
