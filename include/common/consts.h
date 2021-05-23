@@ -50,6 +50,7 @@ const QString DECODING = "Розшифрування";
 const QString VIGENERE_TABLE = "Формування таблиці Віженера";
 const QString MAKE_S_RC4 = "Формування таблиці S";
 const QString MAKE_KSA = "KSA";
+const QString KEY_GENERATION = "Формування ключа";
 
 /*Text formating*/
 const QString TAB = "    ";

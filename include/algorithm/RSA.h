@@ -4,7 +4,9 @@
 #include <algorithm>
 #include <cmath>
 #include <QDebug>
+
 #include "../common/utils.h"
+#include "../common/consts.h"
 
 namespace Algorithm
 {
@@ -26,9 +28,11 @@ class RSA
 
     static bool validateKey(const QString& key);
 
+    static Description::Description m_description;
+
 public:
 
-    static QString encode(const QString& text, const QString& key);
+    static ReturnType encode(const QString& text, const QString& key);
 };
 
 } // namespace Algorithm

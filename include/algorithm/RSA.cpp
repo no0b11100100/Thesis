@@ -54,22 +54,38 @@ bool RSA::validateKey(const QString& key)
     return true;
 }
 
-QString RSA::encode(const QString& text, const QString& key)
+ReturnType RSA::encode(const QString& text, const QString& key)
 {
-    if(!validateKey(key) || !!Utils::validateString(text, ONLY_ENGLISH_LETTERS))
-        return "";
+//    if(!validateKey(key) || !!Utils::validateString(text, ONLY_ENGLISH_LETTERS))
+//        return "";
 
+    m_description.Clear();
+    m_description.AddHeader(KEY_GENERATION);
     auto [P, Q] = parseKey(key);
-            auto n = P*Q;
-            auto U = EulerFuntion(P, Q);
-            auto e = findE(U);
+    auto n = P*Q;
+    auto U = EulerFuntion(P, Q);
+    auto e = findE(U);
 
-            QString result = "";
+    m_description.GetContentDetails() += TAB + "Із двох простих чисел " + QString::number(P) + " " + QString::number(Q) +  " вираховуємо іїх добуток " + QString::number(n) + ".";
+    m_description.GetContentDetails() += "Після цього необхідно отримати значення функції Ейлера: " + QString::number(U) + " та знайти експоненту: " + QString::number(e);
 
-            for(const auto& symb : text)
+    m_description.AddContent();
+
+    m_description.AddHeader(ENCODING);
+    m_description.GetContentDetails() += "Вхідний текст: " + text + "\nКлюч: " + key + "\nЕтапи:\n";
+
+    QString result = "";
+
+    for(const auto& symb : text)
     {
         auto s = symb.cell();
-        result += QString::number(Utils::powMod(s,e,n), 16);
+        auto powMod = QString::number(Utils::powMod(s,e,n), 16);
+        result += powMod;
+        m_description.GetContentDetails() += DOUBLE_TAB + "Для шифрування необхідно вирахувати наступний вираз: (Літера тексту * еспонента) % значення функції Ейлера: " + powMod + "\n";
     }
-    return result;
+
+    m_description.AddContent();
+    return {result, m_description};
 }
+
+Description::Description RSA::m_description = Description::Description();
