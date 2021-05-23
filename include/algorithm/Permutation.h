@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "../common/utils.h"
+#include "../common/consts.h"
 
 namespace Algorithm
 {
@@ -26,10 +27,12 @@ private:
 
     static bool validateKey(QStringList key);
 
-public:
-    static QString encode(const QString& text, const QString& key);
+    static Description::Description m_description;
 
-    static QString decode(const QString& text, const QString& key);
+public:
+    static ReturnType encode(const QString& text, const QString& key);
+
+    static ReturnType decode(const QString& text, const QString& key);
 };
 
 } // namespace Algorithm

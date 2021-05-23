@@ -16,6 +16,8 @@ ReturnType CaesarCipher::encode(const QString& text, const QString& offset)
     //        if(!validateKey(offset) || !Utils::validateString(text, ONLY_UKRAINIAN_LETTERS))
     //            return "error";
 
+    m_description.Clear();
+
     m_description.AddHeader(ENCODING);
     QString result = text;
 
@@ -57,6 +59,7 @@ ReturnType CaesarCipher::decode(const QString& text, const QString& offset)
 
     QString result = text;
 
+    m_description.Clear();
     m_description.AddHeader(DECODING);
     m_description.GetContentDetails() += "Вхідний текст: " + result + "\nКлюч: " + offset + "\nАбетка: " + UKRAINIAN_ALPHABET + "\nЕтапи:\n";
 

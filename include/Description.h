@@ -31,13 +31,13 @@ public:
 
     QStringList GetHeaders() const { return m_headerDescription; }
     QStringList GetContents() const { return m_contentDescription; }
-
     QString& GetContentDetails() { return m_contentDetails; }
 
     void Clear()
     {
         m_headerDescription = QStringList{};
         m_contentDescription = QStringList{};
+        m_contentDetails = "";
     }
 };
 

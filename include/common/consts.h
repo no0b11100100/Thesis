@@ -47,3 +47,9 @@ const QString RESULT = "Результат";
 /*Description headers names*/
 const QString ENCODING = "Шифрування";
 const QString DECODING = "Розшифрування";
+const QString VIGENERE_TABLE = "Формування таблиці Віженера";
+
+
+/*Text formating*/
+const QString TAB = "    ";
+const QString DOUBLE_TAB = TAB + TAB;

@@ -21,6 +21,7 @@ ReturnType Replacement::encode(const QString& text, const QString& permutationAl
     //            return "";
 
     QString result = text;
+    m_description.Clear();
     m_description.AddHeader(ENCODING);
     m_description.GetContentDetails() += "Вхідний текст: " + result + "\nКлюч: " + permutationAlphabet + "\nАбетка: " + UKRAINIAN_ALPHABET + "\nЕтапи:\n";
     std::transform(text.begin(), text.end(), result.begin(), [&](const QChar& c)
@@ -42,6 +43,7 @@ ReturnType Replacement::encode(const QString& text, const QString& permutationAl
 ReturnType Replacement::decode(const QString& text, const QString& permutationAlphabet)
 {
     QString result = text;
+    m_description.Clear();
     m_description.AddHeader(DECODING);
     m_description.GetContentDetails() += "Вхідний текст: " + result + "\nКлюч: " + permutationAlphabet + "\nАбетка: " + UKRAINIAN_ALPHABET + "\nЕтапи:\n";
     std::transform(text.begin(), text.end(), result.begin(), [&](const QChar& c)
