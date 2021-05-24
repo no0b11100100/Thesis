@@ -44,13 +44,19 @@ Window {
             id: _choice
             listModel: _model.algorithmList()
             width: function (array) {
-                const size = array.reduce(function(a,b) {
-                    return a.length > b.length ? a.length : b.length
-                })
+                var size = array[0].length
+                for(var i = 0; i < array.size-1; ++i)
+                    if(array[i] > array[i+1])
+                        size = array[i].length
+                console.log("size", size)
                 return size
             } (_model.algorithmList()) * 14
             height: _root.height
             callback: _model.setAlgorigthm
+
+            onCurrentAlgorithmChanged: {
+                _information.resetText()
+            }
         }
 
         Information {

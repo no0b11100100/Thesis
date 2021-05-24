@@ -8,12 +8,8 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
     QGuiApplication app(argc, argv);
-//    Algorithm::RC4::encode(QString("привет"), "5");
-//    Steganography::encode("/home/drago/Desktop/C++/Thesis/Thesis/close1.png", "test text"); // /home/drago/Pictures/byte.png
-//    Steganography::decode();
-//    Algorithm::SDES::encode("11000010", "10000000");
-//    Algorithm::Permutation::encode("пример маршрутной перестановки", "3,1,4,2,5");
-//    Algorithm::CaesarCipher::encode("я", 2);
+//    qDebug() << Algorithm::SDES::encode("10010111", "1010000010");
+//    qDebug() << Utils::validateString(QString("дд"), ONLY_UKRAINIAN_LETTERS);
     QQmlApplicationEngine engine;
 
     qmlRegisterType<Controller::Controller, 1>("MyModel", 1, 0, "Controller");

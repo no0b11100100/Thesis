@@ -23,6 +23,10 @@ Rectangle {
             background: Rectangle {
                 color: "#a0a0a0"
             }
+
+            onEditingFinished: {
+                normalText = _text.text
+            }
         } // TextArea
     } // ScrollView
 }

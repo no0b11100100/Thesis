@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/UI/">
+    <qresource prefix="/UI">
         <file>main.qml</file>
         <file>TextComponent.qml</file>
         <file>icons/open.png</file>
@@ -7,5 +7,9 @@
         <file>icons/close.png</file>
         <file>ChoiceLab.qml</file>
         <file>Information.qml</file>
+        <file>TheoryWindow.qml</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>TheoryWindow.qml</file>
     </qresource>
 </RCC>

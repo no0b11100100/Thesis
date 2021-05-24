@@ -4,6 +4,9 @@ import QtQuick.Controls 2.15
 Rectangle {
     property variant listModel: []
     property var callback
+
+    signal currentAlgorithmChanged
+
     id: _root
 
     ScrollView{
@@ -22,14 +25,24 @@ Rectangle {
                     width: _root.width
                     text: modelData
 
+
                     background: Rectangle {
                         color: backColor
+                    }
+
+                    contentItem: Text {
+                        text: _button.text
+                        font.pointSize: 12
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
                     }
 
                     onClicked: {
                         callback(_button.text)
                         _repeater.itemAt(_repeater.currentButton).backColor = "grey"
                         _repeater.currentButton = index
+                        _root.currentAlgorithmChanged()
                         _repeater.itemAt(_repeater.currentButton).backColor = "green"
                     }
 
