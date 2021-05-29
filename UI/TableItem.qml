@@ -3,9 +3,19 @@ import QtQuick.Controls 2.15
 
 Rectangle {
     id: _root
-    property var texts
+
     property int size
-    property string title: "S-Box"
+//    readonly property var tableData: _grid.data
+    property var mainModel
+
+    function fill(array) {
+        var res = []
+
+        for(var i = 0; i < array.length; ++i)
+            res.push(array[i])
+
+        return res
+    }
 
     width: _column.width
     height: _column.height
@@ -16,7 +26,7 @@ Rectangle {
 
         Label {
             id: _header
-            text: title
+            text: mainModel[0][0]
             color: "white"
             anchors.horizontalCenter: parent.horizontalCenter
         }
@@ -33,7 +43,7 @@ Rectangle {
                         width: 40
                         height: 40
                         Text {
-                            text: index === 0 ? "" : index
+                            text: index === 0 ? "" : index-1
                             anchors.centerIn: parent
                         }
 
@@ -71,21 +81,22 @@ Rectangle {
                     spacing: 2
 
                     Repeater {
-                        model: texts
+                        model: fill(mainModel[1])
 
                         Rectangle {
                             width: 40
                             height: 40
                             TextArea {
-                                text: index
+                                id: _text
+                                text: modelData
                                 anchors.centerIn: parent
                             }
+                            color: "white"
                         }
                     }
                 } // Grid
-            }
-        }
-
+            } // Row
+        } // Column
     } // Column
     color: "black"
 

@@ -1,7 +1,8 @@
 #pragma once
 #include <QStringList>
 #include <QDebug>
-#include <QVector>
+#include <QVariantList>
+#include <QPair>
 
 #include <memory>
 
@@ -15,6 +16,7 @@
 #include "include/algorithm/SDES.h"
 #include "include/algorithm/RC4.h"
 #include "include/algorithm/RSA.h"
+#include "include/algorithm/AES.h"
 
 using namespace Algorithm;
 
@@ -24,111 +26,203 @@ namespace Controller
 class Controller : public QObject {
     Q_OBJECT
 
-    Q_PROPERTY(QStringList labelsName READ labelsText NOTIFY algorithmNameChanged)
-    Q_PROPERTY(QStringList buttonsName READ buttonsText NOTIFY algorithmNameChanged)
+    using List = QList<QString>;
+    using TextType = QList<List>;
+    using TableType = QList<QList<List>>;
+
+    Q_PROPERTY(QList<QList<QString>> labelsText READ labelsText NOTIFY textChanged)
+    Q_PROPERTY(QStringList buttonsName READ buttonsText NOTIFY viewChanged)
     Q_PROPERTY(QStringList headersName READ headerText NOTIFY descriptionChanged)
     Q_PROPERTY(QStringList contetntsName READ contetntText NOTIFY descriptionChanged)
+    Q_PROPERTY(QList<QList<QList<QString>>> tableInfo READ tableInfo NOTIFY tableModelChanged)
+    Q_PROPERTY(QStringList algorithmsList READ algorithmsList CONSTANT)
 
-    QString m_algorithmName = algorithmList().first();
-    QStringList m_labelsName;
+    QString m_algorithmName = algorithmsList().first();
+    TextType m_texts;
     QStringList m_buttonsName;
+    TableType m_tableInfo;
     Description::Description m_description;
 
     void updateControls()
     {
+        static const List defaultTableValue{"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"};
+        m_tableInfo = {};
+        m_description = {};
+        m_texts = {};
+        m_tableInfo = {};
+        m_buttonsName = QStringList{};
         if(m_algorithmName == AS_CAESAR)
         {
-            m_labelsName = QStringList{TEXT, KEY, RESULT};
+            m_texts = {
+                {TEXT, ""},
+                {KEY, ""},
+                {RESULT, ""}
+            };
             m_buttonsName = QStringList{GENERATE_KEY, ENCODE, DECODE, THEORY};
         }
         else if(m_algorithmName == AS_VIGENERA)
         {
-            m_labelsName = QStringList{TEXT, KEY, RESULT};
+            m_texts = {
+                {TEXT, ""},
+                {KEY, ""},
+                {RESULT, ""}
+            };
             m_buttonsName = QStringList{GENERATE_KEY, ENCODE, DECODE, THEORY};
         }
         else if(m_algorithmName == AS_PERMUTATION)
         {
-            m_labelsName = QStringList{TEXT, KEY, RESULT};
+            m_texts = {
+                {TEXT, ""},
+                {KEY, ""},
+                {RESULT, ""}
+            };
             m_buttonsName = QStringList{GENERATE_KEY, ENCODE, DECODE, THEORY};
         }
         else if(m_algorithmName == AS_REPLACEMENT)
         {
-            m_labelsName = QStringList{TEXT, KEY, RESULT};
+            m_texts = {
+                {TEXT, ""},
+                {KEY, ""},
+                {RESULT, ""}
+            };
             m_buttonsName = QStringList{GENERATE_KEY, ENCODE, DECODE, THEORY};
         }
         else if(m_algorithmName == AS_SDES)
         {
-            m_labelsName = QStringList{TEXT, KEY, RESULT};
+            m_texts = {
+                {TEXT, ""},
+                {KEY, ""},
+                {IP, ""},
+                {EXPANDED, ""},
+                {SBOX_PERMUTATION, ""},
+                {IP_1, ""},
+                {P_10, ""},
+                {P_8, ""},
+                {RESULT, ""}
+            };
+
+            m_tableInfo = {
+                {{"S-Box1"}, defaultTableValue},
+                {{"S-Box2"}, defaultTableValue},
+            };
+
             m_buttonsName = QStringList{GENERATE_KEY, ENCODE, THEORY};
         }
         else if(m_algorithmName == AS_RC4)
         {
-            m_labelsName = QStringList{TEXT, KEY, RESULT};
+            m_texts = {
+                {TEXT, ""},
+                {KEY, ""},
+                {RESULT, ""}
+            };
             m_buttonsName = QStringList{GENERATE_KEY, ENCODE, THEORY};
         }
         else if(m_algorithmName == AS_RSA)
         {
-            m_labelsName = QStringList{TEXT, KEY, RESULT};
+            m_texts = {
+                {TEXT, ""},
+                {KEY, ""},
+                {RESULT, ""}
+            };
+            m_buttonsName = QStringList{GENERATE_KEY, ENCODE, THEORY};
+        }
+        else if(m_algorithmName == AS_AES)
+        {
+            m_texts = {
+                {TEXT, ""},
+                {KEY, ""},
+                {RESULT, ""}
+            };
             m_buttonsName = QStringList{GENERATE_KEY, ENCODE, THEORY};
         }
         else if(m_algorithmName == AS_STEGANOGRAPHY)
         {
-            m_labelsName = QStringList{};
+            m_texts = {
+                {TEXT, ""},
+                {KEY, ""},
+                {RESULT, ""}
+            };
             m_buttonsName = QStringList{GENERATE_KEY, ENCODE, DECODE, THEORY};
         }
-        else
-        {
-            m_labelsName = QStringList{};
-            m_buttonsName = QStringList{};
-        }
     }
 
-    QString encode(const QString& text, const QString& key)
+    QString encode(const QVector<QStringList>& tables, const TextType& pack)
     {
-        qDebug() << "ENCODING DATA " << text << key << " ALGO " << m_algorithmName;
+        qDebug() << "ENCODING" << pack[0][1] << pack[1][1] << "ALGO" << m_algorithmName;
         QString result = "";
+        assert(pack.size() == m_texts.size());
         if(m_algorithmName == AS_CAESAR)
-            std::tie(result, m_description) = CaesarCipher::encode(text, key);
+            std::tie(result, m_description) = CaesarCipher::encode(pack[0][1], pack[1][1]);
         else if(m_algorithmName == AS_VIGENERA)
-            std::tie(result, m_description) = Vigenere::encode(text, key);
+            std::tie(result, m_description) = Vigenere::encode(pack[0][1], pack[1][1]);
         else if(m_algorithmName == AS_PERMUTATION)
-            std::tie(result, m_description) = Permutation::encode(text, key);
+            std::tie(result, m_description) = Permutation::encode(pack[0][1], pack[1][1]);
         else if(m_algorithmName == AS_REPLACEMENT)
-            std::tie(result, m_description) = Replacement::encode(text, key);
+            std::tie(result, m_description) = Replacement::encode(pack[0][1], pack[1][1]);
         else if(m_algorithmName == AS_SDES)
-            result = SDES::encode(text, key);
+            assert(!tables[0].isEmpty() && !tables[1].isEmpty());
+//            result = SDES::encode(text, key);
         else if(m_algorithmName == AS_RC4)
-            std::tie(result, m_description) = RC4::encode(text, key);
+            std::tie(result, m_description) = RC4::encode(pack[0][1], pack[1][1]);
         else if(m_algorithmName == AS_RSA)
-            std::tie(result, m_description) = RSA::encode(text, key);
-        else if(m_algorithmName == AS_STEGANOGRAPHY){}
-//            "AS_STEGANOGRAPHY";
+            std::tie(result, m_description) = RSA::encode(pack[0][1], pack[1][1]);
+        else if(m_algorithmName == AS_STEGANOGRAPHY) {}
 
-        emit descriptionChanged();
         return result;
     }
 
-    QString decode(const QString& text, const QString& key)
+    QString decode(const TextType& pack)
     {
-        qDebug() << "DECODING DATA " << text << key << " ALGO " << m_algorithmName;
+        qDebug() << "DECODING DATA " << pack[0][1] << pack[1][1] << " ALGO " << m_algorithmName;
         QString result = "";
+        assert(pack.size() == m_texts.size());
         if(m_algorithmName == AS_CAESAR)
-            std::tie(result, m_description) = CaesarCipher::decode(text, key);
+            std::tie(result, m_description) = CaesarCipher::decode(pack[0][1], pack[1][1]);
         else if(m_algorithmName == AS_VIGENERA)
-            std::tie(result, m_description) = Vigenere::decode(text, key);
+            std::tie(result, m_description) = Vigenere::decode(pack[0][1], pack[1][1]);
         else if(m_algorithmName == AS_PERMUTATION)
-            std::tie(result, m_description) = Permutation::decode(text, key);
+            std::tie(result, m_description) = Permutation::decode(pack[0][1], pack[1][1]);
         else if(m_algorithmName == AS_REPLACEMENT)
-            std::tie(result, m_description) = Replacement::decode(text, key);
-        else if(m_algorithmName == AS_STEGANOGRAPHY)
-        {}
+            std::tie(result, m_description) = Replacement::decode(pack[0][1], pack[1][1]);
+        else if(m_algorithmName == AS_STEGANOGRAPHY) {}
 
-        emit descriptionChanged();
         return result;
     }
+
+    QString generate()
+    {
+        if(m_algorithmName == AS_CAESAR)
+        {
+            return "12";
+        }
+        else if(m_algorithmName == AS_VIGENERA)
+        {
+            return "";
+        } else if(m_algorithmName == AS_PERMUTATION)
+        {
+            return "";
+        } else if(m_algorithmName == AS_REPLACEMENT)
+        {
+            return "";
+        } else if(m_algorithmName == AS_SDES)
+        {
+            return "";
+        } else if(m_algorithmName == AS_RC4)
+        {
+            return "";
+        } else if(m_algorithmName == AS_RSA)
+        {
+            return "";
+        }
+
+        return "";
+    }
+
 signals:
-    void algorithmNameChanged();
+    void viewChanged();
     void descriptionChanged();
+    void textChanged();
+    void tableModelChanged();
 
 public:
 
@@ -137,6 +231,9 @@ public:
           m_description{Description::Description()}
     {
         updateControls();
+        QString t = "abcdefghijklmnop";
+        Matrix4X4 m(t);
+//        Algorithm::AES::encode("AESUSESAMATRIX", "");
 //        std::tie(std::ignore, m_description) = Algorithm::RSA::encode("data", "53 59");
                 //Algorithm::RC4::encode("HELLOWORLD", "KEY");
                 //Algorithm::Vigenere::encode("Криптографія", "Кібербезпека");
@@ -145,50 +242,61 @@ public:
 //                    Algorithm::CaesarCipher::decode("лсірупґсбхїа", "1");
     }
 
-    Q_INVOKABLE QStringList algorithmList()
+    QStringList algorithmsList() const
     {
         return QStringList{AS_CAESAR,
                            AS_VIGENERA,
                            AS_PERMUTATION,
                            AS_REPLACEMENT,
-//                           AS_RC4,
-//                           AS_RSA
-//                           AS_SDES,
-//                           AS_STEGANOGRAPHY
+                           AS_RC4,
+                           AS_RSA,
+                           AS_SDES,
+                           AS_AES,
+                           AS_STEGANOGRAPHY
                         };
     }
-
     QStringList headerText() const { return m_description.GetHeaders(); }
-
     QStringList contetntText() const { return m_description.GetContents(); }
-
-    Q_INVOKABLE QString getGenerateKey()
-    {
-        return "invoke model getGenerateKey function";
-    }
-
-    QStringList labelsText() { return m_labelsName; }
-    QStringList buttonsText() { return m_buttonsName; }
+    TextType labelsText() const { return m_texts; }
+    QStringList buttonsText() const { return m_buttonsName; }
+    TableType tableInfo() const { return m_tableInfo; }
 
     Q_INVOKABLE void setAlgorigthm(const QString& name)
     {
         m_algorithmName = name;
         updateControls();
-        emit algorithmNameChanged();
-        qDebug() << m_algorithmName << m_labelsName;
-        m_description = {};
-        emit descriptionChanged();
+        emit viewChanged();
+        emit tableModelChanged();
+        emit textChanged();
+        qDebug() << m_algorithmName;
+
     }
 
-    Q_INVOKABLE QString triggerButton(const QString& action, const QString& text, const QString& key)
+    Q_INVOKABLE void trigger(const QString& action, const QVector<QStringList>& tables, const QList<QList<QString>>& pack)
     {
-        qDebug() << "triggerButton" << action << text << key;
-        if(action == ENCODE)
-            return encode(text, key);
-        else if(action == DECODE)
-            return decode(text, key);
+        qDebug() << "trigger" << pack;
 
-        return "";
+        m_texts = pack;
+        auto changeProperty = [&](const QString& field, const QString& data)
+        {
+            for(auto& label : m_texts)
+                if(label.front() == field)
+                    label.back() = data;
+        };
+
+        if(action == ENCODE)
+            changeProperty(RESULT, encode(tables, pack));
+        else if(action == DECODE)
+            changeProperty(RESULT, decode(pack));
+        else if(action == GENERATE_KEY)
+        {
+            changeProperty(KEY, generate());
+            changeProperty(RESULT, "");
+            m_description = {};
+        }
+
+        emit textChanged();
+        emit descriptionChanged();
     }
 };
 

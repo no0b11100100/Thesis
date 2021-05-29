@@ -14,7 +14,16 @@ const QString AS_REPLACEMENT = "Алгоритм замены";
 const QString AS_SDES = "SDES";
 const QString AS_RC4 = "RC4";
 const QString AS_RSA = "RSA";
+const QString AS_AES = "AES";
 const QString AS_STEGANOGRAPHY = "Стеганография";
+
+/*SDES constants*/
+const QString IP = "ІР перестановку";
+const QString EXPANDED = "Розширення ключа";
+const QString SBOX_PERMUTATION = "SBOX перестановка";
+const QString IP_1 = "ІР-1 перестановка";
+const QString P_10 = "Р_10";
+const QString P_8 = "Р_8";
 
 /*Alphabets*/
 const QString ENGLISH_ALPHABET = "abcdefghijklmnopqrstuvwxyz";

@@ -2,10 +2,8 @@ import QtQuick 2.0
 import QtQuick.Controls 2.15
 
 Rectangle {
-    property variant listModel: []
+    property variant listModel
     property var callback
-
-    signal currentAlgorithmChanged
 
     id: _root
 
@@ -42,7 +40,6 @@ Rectangle {
                         callback(_button.text)
                         _repeater.itemAt(_repeater.currentButton).backColor = "grey"
                         _repeater.currentButton = index
-                        _root.currentAlgorithmChanged()
                         _repeater.itemAt(_repeater.currentButton).backColor = "green"
                     }
 

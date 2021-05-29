@@ -5,8 +5,8 @@ import MyModel 1.0
 
 Window {
     id: _root
-    width: 600//_information.minimunWidth + _choice.width
-    height: 480
+    width: 1280//_information.minimunWidth + _choice.width
+    height: 800
     color: "black"//"#222222"
     visible: true
 
@@ -27,22 +27,18 @@ Window {
 //       }
 
     minimumHeight: 400
-    minimumWidth: _information.minimunWidth + _choice.width
+//    minimumWidth: _information.minimunWidth + _choice.width
 //    maximumWidth: _information .minimunWidth + _choice.width
 
     Controller {
         id: _model
-
-        Component.onCompleted: {
-            console.log("labels", _model.labelsName)
-        }
     }
 
     Row {
         spacing: 2
         ChoiceLab {
             id: _choice
-            listModel: _model.algorithmList()
+            listModel: _model.algorithmsList
             width: function (array) {
                 var size = array[0].length
                 for(var i = 0; i < array.size-1; ++i)
@@ -50,13 +46,9 @@ Window {
                         size = array[i].length
                 console.log("size", size)
                 return size
-            } (_model.algorithmList()) * 14
+            } (listModel) * 14
             height: _root.height
             callback: _model.setAlgorigthm
-
-            onCurrentAlgorithmChanged: {
-                _information.resetText()
-            }
         }
 
         Information {

@@ -58,7 +58,7 @@ public:
         buffer = buffer.append(str);
         QString bytes;
         for(auto c : buffer)
-            bytes += (QString("%1").arg(c, 8, 2, QChar('0'))) + " ";
+            bytes += (QString("%1").arg(c, 8, 2, QChar('0')));
 
         return bytes;
     }

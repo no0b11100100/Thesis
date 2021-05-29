@@ -10,7 +10,8 @@ Window {
 
     Text {
         id: _text
-        text: ""
+        textFormat: Text.RichText
+        text: "Normal<sub> Subscript</sub> <sup>Superscript</<sup>"
     } // Text
 
 } // Rectangle

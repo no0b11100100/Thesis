@@ -38,6 +38,7 @@ set(PROJECT_SOURCES
         include/algorithm/RC4.h
         include/algorithm/RSA.h
         include/algorithm/SDES.h
+        include/algorithm/AES.h
         include/algorithm/Steganography.h
 
         include/algorithm/CaesarCipher.cpp
@@ -47,7 +48,9 @@ set(PROJECT_SOURCES
         include/algorithm/RC4.cpp
         include/algorithm/RSA.cpp
         include/algorithm/SDES.cpp
+        include/algorithm/AES.cpp
         include/algorithm/Steganography.cpp
+        include/algorithm/Matrix.h
 
         UI/qml.qrc
         UI/icons/open.png

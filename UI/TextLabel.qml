@@ -2,9 +2,13 @@ import QtQuick 2.0
 import QtQuick.Controls 2.15
 
 Rectangle {
-    property string placeholderText : ""
-    property string normalText: _text.text
+    property var model
     property int size
+    property bool readOnly
+
+    readonly property string text: _text.text
+    readonly property string placeholderText: _text.placeholderText
+
     id: _root
     width: size
     height: 40
@@ -16,16 +20,13 @@ Rectangle {
 
         TextArea {
             id: _text
-            placeholderText: _root.placeholderText
+            placeholderText: model[0]
             font.pointSize: 14
             anchors.verticalCenter: parent.verticalCenter
-            text: normalText
+            text: model[1]
+            readOnly: _root.readOnly
             background: Rectangle {
                 color: "#a0a0a0"
-            }
-
-            onEditingFinished: {
-                normalText = _text.text
             }
         } // TextArea
     } // ScrollView

@@ -17,22 +17,39 @@ Rectangle {
         id: _column
         spacing: 2
 
-        signal buttonPressed
-
         Column
         {
             id: _labelsColumn
             spacing: 2
             Repeater{
                 id: _labelsRepeat
-                model: mainModel.labelsName
+                model: mainModel.labelsText
                 TextLabel {
                     id: _textLabel
                     size: _root.width
-                    placeholderText: modelData
+                    model: modelData
+                    readOnly: index+1 === _labelsRepeat.count
                 } // TextLabel
-            }
-        }
+
+                Component.onCompleted: {
+                    console.log("model", _labelsRepeat.model[0])
+                }
+            } // Repeater
+
+            Row{
+                spacing: 10
+                Repeater{
+                    id: _tableRepeater
+                    model: mainModel.tableInfo
+                    TableItem {
+//                        texts: modelData//["a", "b", "c", "d", "e", "f", "g", "h", "q", "w", "y", "r", "u", "i", "o", "p"]
+                        size: 4
+                        mainModel: modelData
+//                        title: modelData
+                    } // TableItem
+                } // Repeater
+            } // Row
+        } // Column
         Row {
             id: _row
             spacing: 2
@@ -44,30 +61,32 @@ Rectangle {
                 Button {
                     id: _button
                     text: modelData
-                    onClicked: {
-                         _loader.source = ""
-                        if(_button.text === "Теорія")
-                        {
-                            _loader.source = "qrc:/UI/TheoryWindow.qml"
-                            console.log("pressed")
-                        }
-                        else if(_button.text === "Зашифрувати" || _button.text === "Розшифрувати")
-                        {
-                            _column.buttonPressed()
-                            _labelsRepeat.itemAt(2).normalText =
-                                    mainModel.triggerButton(_button.text, _labelsRepeat.itemAt(0).normalText, _labelsRepeat.itemAt(1).normalText)
+                    action: Action {
+                        onTriggered: {
+                            console.log("trigger action")
+
+                            var labels = []
+                            for(var i = 0; i < _labelsRepeat.count; ++i)
+                            {
+                                var labelInfo = [_labelsRepeat.itemAt(i).placeholderText, _labelsRepeat.itemAt(i).text]
+                                labels.push(labelInfo)
+                            }
+                            var tables = []
+                            for(i = 0; i < _tableRepeater.count; ++i)
+                            {
+                                var table = []
+                                for(var j = 0; j < _tableRepeater.itemAt(i).texts.length; ++j)
+                                    table.push(_tableRepeater.itemAt(i).tableData[j].data[0].text)
+
+                                tables.push(table)
+                            }
+//                            console.log("tables", _labelsRepeat.itemAt(0).placeholderText)
+
+                            mainModel.trigger(_button.text, tables, labels)
                         }
                     }
                 } // Button
             } // Repeater
-
-            Component.onCompleted: {
-                _root.resetText.connect(function() {
-                    console.log("processResetText", _labelsRepeat.count)
-                    for(var i = 0; i < _labelsRepeat.count; ++i)
-                        _labelsRepeat.itemAt(i).normalText = ""
-                })
-            }
         } // Row
 
         TextComponent {
