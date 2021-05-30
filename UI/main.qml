@@ -10,22 +10,6 @@ Window {
     color: "black"//"#222222"
     visible: true
 
-//    DropArea {
-//           id: dropArea;
-//           anchors.fill: parent
-//           onEntered: {
-//               _root.color = "gray";
-//               drag.accept (Qt.LinkAction);
-//           }
-//           onDropped: {
-//               console.log(drop.urls)
-//               _root.color = "white"
-//           }
-//           onExited: {
-//               _root.color = "white";
-//           }
-//       }
-
     minimumHeight: 400
 //    minimumWidth: _information.minimunWidth + _choice.width
 //    maximumWidth: _information .minimunWidth + _choice.width

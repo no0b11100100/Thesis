@@ -139,10 +139,10 @@ class Controller : public QObject {
         {
             m_texts = {
                 {TEXT, ""},
-                {KEY, ""},
-                {RESULT, ""}
+//                {KEY, ""},
+//                {RESULT, ""}
             };
-            m_buttonsName = QStringList{GENERATE_KEY, ENCODE, DECODE, THEORY};
+            m_buttonsName = QStringList{ENCODE, DECODE, THEORY};
         }
     }
 
@@ -231,9 +231,37 @@ public:
           m_description{Description::Description()}
     {
         updateControls();
-        QString t = "abcdefghijklmnop";
-        Matrix4X4 m(t);
-//        Algorithm::AES::encode("AESUSESAMATRIX", "");
+
+//        auto GMul = [](int a, int b)
+//        {
+//            int el = 0;
+//            constexpr static int size{8};
+
+////            auto h = (a >> 7) & 1;
+////            el = a << 1;
+////            el ^= h * 0x1B;
+
+//            for(int i{0}; i < size; ++i)
+//            {
+//                if((b&1) != 0)
+//                    el ^= a;
+
+//                bool isHiBitSet = (a&0x80) != 0;
+//                a <<= 1;
+//                if(isHiBitSet)
+//                    a ^= 0x1B;
+
+//                b >>= 1;
+//            }
+
+//            return el;
+//        };
+
+//        qDebug() << "GMul" << GMul(9, 16);
+
+//        QString t = "abcdefghijklmnop";
+//        Matrix4X4 m(t);
+        Algorithm::AES::encode("AESUSESAMATRIX", "");
 //        std::tie(std::ignore, m_description) = Algorithm::RSA::encode("data", "53 59");
                 //Algorithm::RC4::encode("HELLOWORLD", "KEY");
                 //Algorithm::Vigenere::encode("Криптографія", "Кібербезпека");

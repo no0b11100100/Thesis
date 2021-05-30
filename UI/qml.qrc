@@ -9,6 +9,7 @@
         <file>Information.qml</file>
         <file>TheoryWindow.qml</file>
         <file>TableItem.qml</file>
+        <file>GragAndDropArea.qml</file>
     </qresource>
     <qresource prefix="/">
         <file>TheoryWindow.qml</file>

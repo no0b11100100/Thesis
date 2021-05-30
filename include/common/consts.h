@@ -43,7 +43,7 @@ const QStringList PERMUTATION_8 = {"1", "2", "3", "4", "5", "6", "7", "8"};
 const QStringList PERMUTATION_10 = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
 
 /*Buttons text*/
-const QString GENERATE_KEY = "Сгенерувать ключ";
+const QString GENERATE_KEY = "Згенерувати ключ";
 const QString ENCODE = "Зашифрувати";
 const QString DECODE = "Розшифрувати";
 const QString THEORY = "Теорія";

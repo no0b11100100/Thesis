@@ -42,10 +42,10 @@ Rectangle {
                     id: _tableRepeater
                     model: mainModel.tableInfo
                     TableItem {
-//                        texts: modelData//["a", "b", "c", "d", "e", "f", "g", "h", "q", "w", "y", "r", "u", "i", "o", "p"]
+                        //                        texts: modelData//["a", "b", "c", "d", "e", "f", "g", "h", "q", "w", "y", "r", "u", "i", "o", "p"]
                         size: 4
                         mainModel: modelData
-//                        title: modelData
+                        //                        title: modelData
                     } // TableItem
                 } // Repeater
             } // Row
@@ -53,6 +53,17 @@ Rectangle {
         Row {
             id: _row
             spacing: 2
+
+//            ComboBox {
+//                id: _combo
+//                model: ["encode", "decode"]
+//                visible: _combo.count !== 0
+
+//                Component.onCompleted: {
+//                    console.log(_combo.count)
+//                }
+//            }
+
 
             Repeater {
                 id: _buttonRepeater
@@ -65,24 +76,32 @@ Rectangle {
                         onTriggered: {
                             console.log("trigger action")
 
-                            var labels = []
-                            for(var i = 0; i < _labelsRepeat.count; ++i)
+                            _loader.source = ""
+                            if(_button.text == "Теорія")
                             {
-                                var labelInfo = [_labelsRepeat.itemAt(i).placeholderText, _labelsRepeat.itemAt(i).text]
-                                labels.push(labelInfo)
-                            }
-                            var tables = []
-                            for(i = 0; i < _tableRepeater.count; ++i)
+                                _loader.source = "qrc:/UI/TheoryWindow.qml"
+                            } else
                             {
-                                var table = []
-                                for(var j = 0; j < _tableRepeater.itemAt(i).texts.length; ++j)
-                                    table.push(_tableRepeater.itemAt(i).tableData[j].data[0].text)
 
-                                tables.push(table)
+                                var labels = []
+                                for(var i = 0; i < _labelsRepeat.count; ++i)
+                                {
+                                    var labelInfo = [_labelsRepeat.itemAt(i).placeholderText, _labelsRepeat.itemAt(i).text]
+                                    labels.push(labelInfo)
+                                }
+                                var tables = []
+                                for(i = 0; i < _tableRepeater.count; ++i)
+                                {
+                                    var table = []
+                                    for(var j = 0; j < _tableRepeater.itemAt(i).texts.length; ++j)
+                                        table.push(_tableRepeater.itemAt(i).tableData[j].data[0].text)
+
+                                    tables.push(table)
+                                }
+                                //                            console.log("tables", _labelsRepeat.itemAt(0).placeholderText)
+
+                                mainModel.trigger(_button.text, tables, labels)
                             }
-//                            console.log("tables", _labelsRepeat.itemAt(0).placeholderText)
-
-                            mainModel.trigger(_button.text, tables, labels)
                         }
                     }
                 } // Button
