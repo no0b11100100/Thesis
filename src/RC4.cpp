@@ -1,4 +1,4 @@
-#include "RC4.h"
+#include "../include/algorithm/RC4.h"
 
 using namespace Algorithm;
 

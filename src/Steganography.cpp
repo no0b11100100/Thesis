@@ -1,4 +1,4 @@
-#include "Steganography.h"
+#include "../include/algorithm/Steganography.h"
 
 using namespace Algorithm;
 

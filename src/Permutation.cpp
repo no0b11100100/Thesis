@@ -1,4 +1,4 @@
-#include "Permutation.h"
+#include "../include/algorithm/Permutation.h"
 
 using namespace Algorithm;
 

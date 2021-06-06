@@ -1,4 +1,4 @@
-#include "Vigenere.h"
+#include "../include/algorithm/Vigenere.h"
 #include <random>
 #include <algorithm>
 
@@ -29,7 +29,7 @@ void Vigenere::createTableDescription(const Vigenere::TableType& table)
     m_description.Clear();
 
     m_description.AddHeader(VIGENERE_TABLE);
-    m_description.GetContentDetails() += TAB + "Сформуємо таблицю Віженера:\n" + DOUBLE_TAB + "   " + UKRAINIAN_ALPHABET + "\n";
+    m_description.GetContentDetails() += TAB + "Сформуємо таблицю Віженера:\n" + DOUBLE_TAB + "  " + UKRAINIAN_ALPHABET + "\n";
     for(const auto& row : table)
         m_description.GetContentDetails() += DOUBLE_TAB + row.at(0) + " " + row + "\n";
 

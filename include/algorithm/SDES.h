@@ -37,14 +37,11 @@ class SDES
 
     static QString prepareDataForSBox(const QString& text);
 
-    static QString SBox1 (const QString& text);
-
-    static QString SBox2 (const QString& text);
-
     static void SPermutation(QString& text, const permutationType<4>& permutation);
 
     static QString Round(const QString& text, const QString& key, const int& round,
-                         const permutationType<8>& expanded, const permutationType<4>& sbox);
+                         const permutationType<8>& expanded, const permutationType<4>& sbox,
+                          const std::unordered_map<QString, QString>&, const std::unordered_map<QString, QString>&);
 
     static Description::Description m_description;
 
@@ -71,6 +68,51 @@ class SDES
             result[i] = value.toInt();
             ++i;
         }
+        return result;
+    }
+
+    static std::unordered_map<QString, QString> toMap(const QStringList& list)
+    {
+        std::unordered_map<QString, QString> result;
+
+        std::unordered_map<int, QString> bin {
+            {0, "00"},
+            {1, "01"},
+            {2, "10"},
+            {3, "11"},
+            {4, "error"}
+        };
+
+        auto toHex = [&](const QString& item)
+        {
+            return bin.at(item.toInt());
+        };
+
+        auto indexToHex = [&](const int& item)
+        {
+            return bin.at(item);
+        };
+
+        int i = 0, j = 0;
+        const int limit = 4;
+        for(const auto& item : list)
+        {
+//            qDebug() << "item" << item;
+            if(j != 0 && j % limit == 0)
+            {
+                j = 0;
+                ++i;
+            }
+
+//            assert(i < 4 && j < 4);
+            result.emplace(indexToHex(i)+indexToHex(j),toHex(item));
+            ++j;
+        }
+
+//        qDebug() << "toMap";
+//        for(auto v : result)
+//            qDebug() << v;
+//        qDebug() << "end toMap";
         return result;
     }
 
