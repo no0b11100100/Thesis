@@ -24,6 +24,8 @@ public:
     static ReturnType encode(const QString& text, const QString& permutationAlphabet);
 
     static ReturnType decode( const QString& text, const QString& permutationAlphabet);
+
+    static QString generateKey();
 };
 
 } // namespace Algorithm

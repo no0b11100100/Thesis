@@ -218,4 +218,9 @@ ReturnType Permutation::decode(const QString& text, const QString& key)
     return {result, m_description};
 }
 
+QString Permutation::generateKey()
+{
+    return "3,1,4,2,5";
+}
+
 Description::Description Permutation::m_description = Description::Description();

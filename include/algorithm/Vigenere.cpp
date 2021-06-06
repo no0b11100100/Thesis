@@ -1,4 +1,6 @@
 #include "Vigenere.h"
+#include <random>
+#include <algorithm>
 
 using namespace Algorithm;
 
@@ -100,7 +102,17 @@ ReturnType Vigenere::decode(const QString& text, const QString& key)
     m_description.GetContentDetails() += "В результаті отримуємо: " + encodeText + "\n";
     m_description.AddContent();
 
-    return {encodeText, m_description};
+        return {encodeText, m_description};
+    }
+
+QString Vigenere::generateKey()
+{
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::array<QString, 3> keys {"кібербезпека", "криптографія", "криптоаналіз"};
+    std::shuffle(keys.begin(), keys.end(), g);
+
+    return keys.front();
 }
 
 Description::Description Vigenere::m_description = Description::Description();

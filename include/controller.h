@@ -193,17 +193,17 @@ class Controller : public QObject {
     {
         if(m_algorithmName == AS_CAESAR)
         {
-            return "12";
+            return CaesarCipher::generateKey();
         }
         else if(m_algorithmName == AS_VIGENERA)
         {
-            return "";
+            return Vigenere::generateKey();
         } else if(m_algorithmName == AS_PERMUTATION)
         {
-            return "";
+            return Permutation::generateKey();
         } else if(m_algorithmName == AS_REPLACEMENT)
         {
-            return "";
+            return Replacement::generateKey();
         } else if(m_algorithmName == AS_SDES)
         {
             return "";

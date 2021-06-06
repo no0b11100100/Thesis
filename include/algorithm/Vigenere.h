@@ -28,6 +28,8 @@ public:
 
     static ReturnType decode(const QString& text, const QString& key);
 
+    static QString generateKey();
+
 };
 
 } // namespace Algorithm

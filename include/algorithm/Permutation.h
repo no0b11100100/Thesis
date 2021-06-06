@@ -33,6 +33,8 @@ public:
     static ReturnType encode(const QString& text, const QString& key);
 
     static ReturnType decode(const QString& text, const QString& key);
+
+    static QString generateKey();
 };
 
 } // namespace Algorithm

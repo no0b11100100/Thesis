@@ -1,4 +1,6 @@
 #include "CaesarCipher.h"
+#include <random>
+#include <algorithm>
 
 using namespace Algorithm;
 
@@ -87,6 +89,16 @@ ReturnType CaesarCipher::decode(const QString& text, const QString& offset)
     m_description.AddContent();
 
     return {result, m_description};
+}
+
+QString CaesarCipher::generateKey()
+{
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::array<QString, 4> keys {"12", "7", "3", "27"};
+    std::shuffle(keys.begin(), keys.end(), g);
+
+    return keys.front();
 }
 
 Description::Description CaesarCipher::m_description = Description::Description();

@@ -1,5 +1,6 @@
 #include "Replacement.h"
-
+#include <random>
+#include <algorithm>
 using namespace Algorithm;
 
 bool Replacement::validateKey(const QString& key)
@@ -56,6 +57,15 @@ ReturnType Replacement::decode(const QString& text, const QString& permutationAl
     m_description.AddContent();
 
     return {result, m_description};
+}
+
+QString Replacement::generateKey()
+{
+    std::random_device rd;
+    std::mt19937 g(rd());
+    auto key = UKRAINIAN_ALPHABET;
+    std::shuffle(key.begin(), key.end(), g);
+    return key;
 }
 
 Description::Description Replacement::m_description = Description::Description();
