@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Dialogs 1.3
 
 Rectangle {
     readonly property int minimunWidth: _row.width
@@ -82,7 +83,6 @@ Rectangle {
                                 _loader.source = "qrc:/UI/TheoryWindow.qml"
                             } else
                             {
-
                                 var labels = []
                                 for(var i = 0; i < _labelsRepeat.count; ++i)
                                 {
@@ -93,8 +93,9 @@ Rectangle {
                                 for(i = 0; i < _tableRepeater.count; ++i)
                                 {
                                     var table = []
-                                    for(var j = 0; j < _tableRepeater.itemAt(i).texts.length; ++j)
+                                    for(var j = 0; j < _tableRepeater.itemAt(i).tableData.length-1; ++j)
                                         table.push(_tableRepeater.itemAt(i).tableData[j].data[0].text)
+
 
                                     tables.push(table)
                                 }
@@ -107,6 +108,21 @@ Rectangle {
                 } // Button
             } // Repeater
         } // Row
+
+//        ErrorWindow {
+//            id: messageDialog
+//            position: [_root.width/2, _root.height/2]
+//            errorMessage: mainModel.error
+//            visible: messageDialog.errorMessage !== ""
+//        }
+
+        MessageDialog {
+            id: messageDialog
+            title: "Error"
+            text: mainModel.error
+            icon: StandardIcon.Critical
+            visible: mainModel.error !== ""
+        }
 
         TextComponent {
             id: _details

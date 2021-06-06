@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
 import MyModel 1.0
+import QtQuick.Dialogs 1.1
 
 Window {
     id: _root
@@ -10,9 +11,13 @@ Window {
     color: "black"//"#222222"
     visible: true
 
+//    active: _model.error !== ""
+
     minimumHeight: 400
+
 //    minimumWidth: _information.minimunWidth + _choice.width
 //    maximumWidth: _information .minimunWidth + _choice.width
+
 
     Controller {
         id: _model

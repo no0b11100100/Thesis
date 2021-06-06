@@ -5,7 +5,7 @@ Rectangle {
     id: _root
 
     property int size
-//    readonly property var tableData: _grid.data
+    readonly property var tableData: _grid.data
     property var mainModel
 
     function fill(array) {

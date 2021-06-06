@@ -10,6 +10,7 @@
         <file>TheoryWindow.qml</file>
         <file>TableItem.qml</file>
         <file>GragAndDropArea.qml</file>
+        <file>ErrorWindow.qml</file>
     </qresource>
     <qresource prefix="/">
         <file>TheoryWindow.qml</file>

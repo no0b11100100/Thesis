@@ -5,6 +5,9 @@
 
 /*Alias*/
 using ReturnType = std::tuple<QString, Description::Description>;
+using List = QList<QString>;
+using TextType = QList<List>;
+using TableType = QList<QList<List>>;
 
 /*Algorithm names*/
 const QString AS_CAESAR = "Алгоритм Цезаря";

@@ -3,7 +3,6 @@
 #include <QDebug>
 #include <QVariantList>
 #include <QPair>
-
 #include <memory>
 
 #include "include/common/consts.h"
@@ -26,26 +25,24 @@ namespace Controller
 class Controller : public QObject {
     Q_OBJECT
 
-    using List = QList<QString>;
-    using TextType = QList<List>;
-    using TableType = QList<QList<List>>;
-
     Q_PROPERTY(QList<QList<QString>> labelsText READ labelsText NOTIFY textChanged)
     Q_PROPERTY(QStringList buttonsName READ buttonsText NOTIFY viewChanged)
     Q_PROPERTY(QStringList headersName READ headerText NOTIFY descriptionChanged)
     Q_PROPERTY(QStringList contetntsName READ contetntText NOTIFY descriptionChanged)
     Q_PROPERTY(QList<QList<QList<QString>>> tableInfo READ tableInfo NOTIFY tableModelChanged)
     Q_PROPERTY(QStringList algorithmsList READ algorithmsList CONSTANT)
+    Q_PROPERTY(QString error READ error NOTIFY errorChanged)
 
     QString m_algorithmName = algorithmsList().first();
     TextType m_texts;
     QStringList m_buttonsName;
     TableType m_tableInfo;
     Description::Description m_description;
+    QString m_error;
 
     void updateControls()
     {
-        static const List defaultTableValue{"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"};
+        static const List defaultTableValue{"","","","","","","","","","","","","","","",""};
         m_tableInfo = {};
         m_description = {};
         m_texts = {};
@@ -160,9 +157,10 @@ class Controller : public QObject {
         else if(m_algorithmName == AS_REPLACEMENT)
             std::tie(result, m_description) = Replacement::encode(pack[0][1], pack[1][1]);
         else if(m_algorithmName == AS_SDES)
+        {
             assert(!tables[0].isEmpty() && !tables[1].isEmpty());
-//            result = SDES::encode(text, key);
-        else if(m_algorithmName == AS_RC4)
+            std::tie(result, m_description) = SDES::encode(tables, pack);
+        } else if(m_algorithmName == AS_RC4)
             std::tie(result, m_description) = RC4::encode(pack[0][1], pack[1][1]);
         else if(m_algorithmName == AS_RSA)
             std::tie(result, m_description) = RSA::encode(pack[0][1], pack[1][1]);
@@ -223,15 +221,16 @@ signals:
     void descriptionChanged();
     void textChanged();
     void tableModelChanged();
+    void errorChanged();
 
 public:
 
     Controller(QObject* parent = nullptr)
         : QObject{parent},
-          m_description{Description::Description()}
+          m_description{Description::Description()},
+          m_error{""}
     {
         updateControls();
-
 //        auto GMul = [](int a, int b)
 //        {
 //            int el = 0;
@@ -261,7 +260,7 @@ public:
 
 //        QString t = "abcdefghijklmnop";
 //        Matrix4X4 m(t);
-        Algorithm::AES::encode("AESUSESAMATRIX", "");
+//        Algorithm::AES::encode("AESUSESAMATRIX", "");
 //        std::tie(std::ignore, m_description) = Algorithm::RSA::encode("data", "53 59");
                 //Algorithm::RC4::encode("HELLOWORLD", "KEY");
                 //Algorithm::Vigenere::encode("Криптографія", "Кібербезпека");
@@ -304,6 +303,9 @@ public:
     {
         qDebug() << "trigger" << pack;
 
+//        m_error = "something goes wrong\nplease try again";
+//        emit errorChanged();
+//        m_error = "";
         m_texts = pack;
         auto changeProperty = [&](const QString& field, const QString& data)
         {
@@ -326,6 +328,8 @@ public:
         emit textChanged();
         emit descriptionChanged();
     }
+
+    QString error() const { return m_error; }
 };
 
 } // namespace Controller
