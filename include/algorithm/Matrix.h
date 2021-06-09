@@ -41,13 +41,27 @@ class Matrix4X4 {
 
         void shift(const int& offset)
         {
+            if(offset == 0) return;
             auto tmp = line;
             for(int i{0}; i < matrixSize; ++i)
-                line[(offset+i)%matrixSize] = tmp[i];
-
-            qDebug() << "shift";
-            for(const auto& v : line)
-                qDebug("%s", QString::number(v, 16).toStdString().c_str());
+            {
+                line[i] = tmp[(offset+i)%matrixSize];
+//                qDebug() << "index" << (offset+i)%matrixSize;
+            }
+//            qDebug() << "shift";
+//            Print();
+//            qDebug() << "";
+/*
+ * 1 + 0 = 0
+ * 1 + 1 = 1
+ * 1 + 2 = 2
+ * 1 + 3 = 3
+ *
+ * 2 + 0 = 0
+ * 2 + 1 = 1
+ * 2 + 2 = 2
+ * 2 + 3 = 3
+*/
         }
 
         void shiftUp()
@@ -58,6 +72,20 @@ class Matrix4X4 {
 //            qDebug() << "shift";
 //            for(const auto& v : line)
 //                qDebug("%s", QString::number(v, 16).toStdString().c_str());
+        }
+
+        QString toString() const
+        {
+            QString res = "";
+            for(const auto el : line)
+            {
+                if(el < 9)
+                    res += "0";
+
+                res += QString::number(el, 16);
+            }
+
+            return res;
         }
 
         void Print() const
@@ -123,7 +151,7 @@ class Matrix4X4 {
         std::transform(lhs.cbegin(), lhs.cend(), rhs.cbegin(), result.begin(),
                        [&](const Line::Element& lhsValue, const Line::Element& rhsValue)
         {
-//            qDebug() << "GMul" << lhsValue << rhsValue << QString::number(GMul(lhsValue,rhsValue), 16);
+//            qDebug() << "GMul" << QString::number(lhsValue,16) << QString::number(rhsValue,16) << QString::number(GMul(lhsValue,rhsValue), 16);
             return GMul(lhsValue,rhsValue);
         });
 
@@ -192,13 +220,37 @@ public:
         }
     }
 
-    void Print()
+    void Print() const
     {
         for(const auto& v : m_state)
             qDebug("%s %s %s %s", QString::number(v.at(0), 16).toStdString().c_str(),
                                   QString::number(v.at(1), 16).toStdString().c_str(),
                                   QString::number(v.at(2), 16).toStdString().c_str(),
                                   QString::number(v.at(3), 16).toStdString().c_str());
+    }
+
+    void PrintAsRow()
+    {
+        qDebug("%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s",
+                              QString::number(m_state.at(0).at(0), 16).toStdString().c_str(),
+                              QString::number(m_state.at(1).at(0), 16).toStdString().c_str(),
+                              QString::number(m_state.at(2).at(0), 16).toStdString().c_str(),
+                              QString::number(m_state.at(3).at(0), 16).toStdString().c_str(),
+               QString::number(m_state.at(0).at(1), 16).toStdString().c_str(),
+               QString::number(m_state.at(1).at(1), 16).toStdString().c_str(),
+               QString::number(m_state.at(2).at(1), 16).toStdString().c_str(),
+               QString::number(m_state.at(3).at(1), 16).toStdString().c_str(),
+
+               QString::number(m_state.at(0).at(2), 16).toStdString().c_str(),
+               QString::number(m_state.at(1).at(2), 16).toStdString().c_str(),
+               QString::number(m_state.at(2).at(2), 16).toStdString().c_str(),
+               QString::number(m_state.at(3).at(2), 16).toStdString().c_str(),
+
+               QString::number(m_state.at(0).at(3), 16).toStdString().c_str(),
+               QString::number(m_state.at(1).at(3), 16).toStdString().c_str(),
+               QString::number(m_state.at(2).at(3), 16).toStdString().c_str(),
+               QString::number(m_state.at(3).at(3), 16).toStdString().c_str()
+               );
     }
 
     Line GetRow(const int& index) const { return m_state.at(index); }
@@ -265,6 +317,15 @@ public:
     void rowShift(const int& index, const int& offset)
     {
         m_state.at(index).shift(offset);
+    }
+
+    QString toString() const
+    {
+        QString res = "";
+        for(int i{0}; i < columns(); ++i)
+            res += GetColumn(i).toString();
+
+        return res;
     }
 
     Line& at(int index) { return m_state.at(index); }

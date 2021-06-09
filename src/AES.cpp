@@ -2,74 +2,73 @@
 
 using namespace Algorithm;
 
-void AES::SubBytes()
+void AES::SubBytes(Matrix4X4& matrix)
 {
     static auto sBox = initSBox();
-    for(int i {0}; i < m_matrix.rows(); ++i)
-        for(int j{0}; j < m_matrix.columns(); ++j)
-            qDebug() << "SBOX" << sBox.at(m_matrix.at({i,j}));
-}
+    for(int i {0}; i < matrix.rows(); ++i)
+        for(int j{0}; j < matrix.columns(); ++j)
+            matrix.ChangeAt(sBox.at(matrix.at({i,j})), {i,j});
 
-Matrix4X4 AES::KeyExpanded(const QString& key, const int& round)
-{
-    Matrix4X4 expandedKey(key);
-    auto shifted = expandedKey.GetColumn(3);
-    shifted.shiftUp();
-    static auto sBox = initSBox();
-
-    for(auto& v : shifted)
-        v = sBox.at(v);
-
-    auto column = expandedKey.GetColumn(0) ^ shifted ^ rcon.at(round);
-    Matrix4X4 generatedKey;
-    generatedKey.ChangeColumn(column, 0);
-
-    for(int i{1}; i < expandedKey.columns(); ++i)
-        generatedKey.ChangeColumn(generatedKey.GetColumn(i-1) ^ expandedKey.GetColumn(i), i);
-
-
-    generatedKey.Print();
+    qDebug() << "SubBytes";
+    matrix.Print();
     qDebug() << "";
-
-    return generatedKey;
 }
 
 Matrix4X4 AES::KeyExpanded(const Matrix4X4& key, const int& round)
 {
     Matrix4X4 expandedKey = key;
+//    qDebug() << "take last column";
+
+//    expandedKey.GetColumn(3).Print();
     auto shifted = expandedKey.GetColumn(3);
     shifted.shiftUp();
+//    qDebug() << "shiftedUp";
+//    shifted.Print();
     static auto sBox = initSBox();
 
     for(auto& v : shifted)
         v = sBox.at(v);
 
+//    qDebug() << "sBox";
+//    shifted.Print();
+
+//    qDebug() << "rcon";
+//    rcon.at(round).Print();
+//    expandedKey.GetColumn(0).Print();
     auto column = expandedKey.GetColumn(0) ^ shifted ^ rcon.at(round);
+//    qDebug() << "XOR";
+//    column.Print();
     Matrix4X4 generatedKey;
     generatedKey.ChangeColumn(column, 0);
+//    qDebug() << "Set in matrix";
+//    generatedKey.GetColumn(0).Print();
 
     for(int i{1}; i < expandedKey.columns(); ++i)
         generatedKey.ChangeColumn(generatedKey.GetColumn(i-1) ^ expandedKey.GetColumn(i), i);
 
 
-    generatedKey.Print();
+    qDebug() << "key";
+    generatedKey.PrintAsRow();
     qDebug() << "";
 
     return generatedKey;
 }
 
-
-void AES::ShiftRows()
+void AES::ShiftRows(Matrix4X4& matrix)
 {
     int i = 0;
-    for(auto& row : m_matrix)
+    for(auto& row : matrix)
     {
         row.shift(i);
         ++i;
     }
+
+    qDebug() << "ShiftRows";
+    matrix.Print();
+    qDebug() << "";
 }
 
-void AES::MixColumns()
+void AES::MixColumns(Matrix4X4& matrix)
 {
     Matrix4X4 state({
             {2,3,1,1},
@@ -78,47 +77,52 @@ void AES::MixColumns()
             {3,1,1,2},
         });
 
-//    m_matrix = {
-//        {135,242,77,151},
-//        {110,76,144,236},
-//        {70,231,74,195},
-//        {166,140,216,149},
-//    };
-
-    for(int i{0}; i < m_matrix.rows(); ++i)
+    for(int i{0}; i < matrix.rows(); ++i)
     {
         int j = 0;
+        Matrix4X4::Line line;
         for(const auto& row : state)
         {
-            auto mult = row * m_matrix.GetColumn(i);
+            auto mult = row * matrix.GetColumn(i);
             auto tmp = mult.at(0);
             for(auto it = std::next(mult.cbegin()); it != mult.cend(); ++it)
                 tmp ^= *it;
-
-            m_matrix.ChangeAt(tmp, {i,j});
+            line.ChangeAt(j, tmp);
             ++j;
         }
+
+        matrix.ChangeColumn(line, i);
     }
+
+    qDebug() << "MixColumns";
+    matrix.Print();
+    qDebug() << "";
 }
 
-void AES::AddRoundKey(const Matrix4X4& key)
+void AES::AddRoundKey(Matrix4X4& matrix, const Matrix4X4& key)
 {
-    m_matrix = m_matrix*key;
+    qDebug() << "AddRoundKey key";
+    key.Print();
+    qDebug() << "";
+    matrix = matrix^key;
+    qDebug() << "AddRoundKey";
+    matrix.Print();
+    qDebug() << "";
 }
 
-void AES::EvenRound(const Matrix4X4 &key)
+void AES::FinalRound(Matrix4X4& matrix, const Matrix4X4 &key)
 {
-    SubBytes();
-    ShiftRows();
-    AddRoundKey(key);
+    SubBytes(matrix);
+    ShiftRows(matrix);
+    AddRoundKey(matrix, key);
 }
 
-void AES::OddRound(const Matrix4X4 &key)
+void AES::Round(Matrix4X4& matrix, const Matrix4X4 &key)
 {
-    SubBytes();
-    ShiftRows();
-    MixColumns();
-    AddRoundKey(key);
+    SubBytes(matrix);
+    ShiftRows(matrix);
+    MixColumns(matrix);
+    AddRoundKey(matrix, key);
 }
 
 std::array<uint8_t, 256> AES::initSBox()
@@ -151,27 +155,30 @@ std::array<uint8_t, 256> AES::initSBox()
 
 ReturnType AES::encode(const QString& text, const QString& key)
 {
-    QString result = "";
-
-    auto keyState = Matrix4X4("TEAMSCORPIAN1234");
+    auto keyState = Matrix4X4(key);
     keyState.Print();
     qDebug() << "";
+    auto textState = Matrix4X4(text);
+    textState.Print();
+    qDebug() << "";
+    textState = keyState^textState;
+    textState.Print();
 
-    for(int i{0}; i < rounds; ++i)
+    for(int i{0}; i < rounds-1; ++i)
+    {
+        qDebug() << "round" << i;
         keyState = KeyExpanded(keyState, i);
+        Round(textState, keyState);
+    }
 
+    FinalRound(textState, KeyExpanded(keyState, 9));
 
-//    Matrix4X4 _key;
-//    AddRoundKey(_key);
-
-//    for(int i{0}; i < rounds; ++i)
-//        i&1 ? OddRound(_key) : EvenRound(_key);
-
-    return {result, m_description};
+    textState.Print();
+    qDebug() << textState.toString();
+    return {textState.toString(), m_description};
 }
 
 Description::Description AES::m_description = Description::Description();
-Matrix4X4 AES::m_matrix = Matrix4X4();
 std::array<Matrix4X4::Line, 10> AES::rcon{
     Matrix4X4::Line({1,0,0,0}),
     Matrix4X4::Line({2,0,0,0}),
