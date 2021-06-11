@@ -11,6 +11,8 @@ Window {
     color: "black"//"#222222"
     visible: true
 
+//    readonly property var components: []
+
 //    active: _model.error !== ""
 
     minimumHeight: 400
@@ -21,6 +23,32 @@ Window {
 
     Controller {
         id: _model
+
+    }
+
+    Component {
+        id: _main
+
+        Information {
+            id: _information
+            width: _root.width - _choice.width
+            height: _root.height
+            mainModel: _model
+
+            Component.onCompleted: {
+                console.log(width)
+            }
+        }
+    }
+
+    Component {
+        id: _steganography
+
+        Steganofraphy {
+            width: _root.width - _choice.width
+            height: _root.height
+            trigger: _model.trigger
+        }
     }
 
     Row {
@@ -38,17 +66,18 @@ Window {
             } (listModel) * 14
             height: _root.height
             callback: _model.setAlgorigthm
+
+            onAlgorithmChanged: {
+                if(name === "Стеганографія")
+                    _viewLoader.sourceComponent = _steganography
+                else
+                     _viewLoader.sourceComponent = _main
+            }
         }
 
-        Information {
-            id: _information
-            width: _root.width - _choice.width
-            height: _root.height
-            mainModel: _model
-
-            Component.onCompleted: {
-                console.log(width)
-            }
+        Loader {
+            id: _viewLoader
+            sourceComponent: _main
         }
     }
 }

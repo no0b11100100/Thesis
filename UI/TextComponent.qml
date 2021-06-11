@@ -48,6 +48,8 @@ Rectangle {
                         : ""
 
                         font.pointSize: 14
+                        font.family: "Courier"
+//                        fontSizeMode: Text.Fit
                         wrapMode: Text.Wrap
                         lineHeight: 1
                     } // Text

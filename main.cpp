@@ -8,8 +8,6 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
     QGuiApplication app(argc, argv);
-//    qDebug() << Algorithm::SDES::encode("10010111", "1010000010");
-//    qDebug() << Utils::validateString(QString("дд"), ONLY_UKRAINIAN_LETTERS);
     QQmlApplicationEngine engine;
 
     qmlRegisterType<Controller::Controller, 1>("MyModel", 1, 0, "Controller");

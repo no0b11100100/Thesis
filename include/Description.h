@@ -33,6 +33,11 @@ public:
     QStringList GetContents() const { return m_contentDescription; }
     QString& GetContentDetails() { return m_contentDetails; }
 
+    QString operator + (QStringList)
+    {
+        return "";
+    }
+
     void Clear()
     {
         m_headerDescription = QStringList{};

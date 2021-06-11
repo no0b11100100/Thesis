@@ -51,16 +51,48 @@ class Utils
 
         *std::prev(end) = tmp;
     }
-public:
-    static QString stringToBin(QString str)
-    {
-        QByteArray buffer;
-        buffer = buffer.append(str);
-        QString bytes;
-        for(auto c : buffer)
-            bytes += (QString("%1").arg(c, 8, 2, QChar('0')));
 
-        return bytes;
+    static QChar binToDecimal(const QString& data)
+    {
+        assert(data.size() % 8 == 0);
+        constexpr std::array<int, 8> pow{128, 64, 32, 16, 8, 4, 2, 1};
+        int res = 0;
+
+        int i = 0;
+        for(const auto& bit : data)
+        {
+            if(bit == "1")
+                res += pow.at(i);
+            ++i;
+        }
+
+        return QChar(res);
+    }
+
+public:
+    static QString stringToBin(const QString& str)
+    {
+        QString res = "";
+        for(const auto& v : str.toLatin1())
+            res += QString("%1").arg(v, 8, 2, QChar('0'));
+        //QString::number(static_cast<int>(v), 2);
+        return res;
+    }
+
+    static QString binToString(const QString binData)
+    {
+        assert(binData.size() % 8 == 0);
+        QString res = "";
+
+        constexpr int step = 8;
+        auto makeChan = [](const QString& data, int currentIndex)
+        {
+            return data.mid(currentIndex, step);
+        };
+
+        for(int index = 0; index < binData.size(); index += step)
+            res +=  binToDecimal(makeChan(binData, index));
+        return res;
     }
 
     static QString binToHex(const QString& binStr)

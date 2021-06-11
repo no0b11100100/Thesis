@@ -2,49 +2,25 @@
 
 using namespace Algorithm;
 
-QString Steganography::stringToByte(QString str)
-{
-    QByteArray buffer;
-    buffer = buffer.append(str);
-    QString bytes;
-    for(auto c : buffer)
-        bytes += (QString("%1").arg(c, 8, 2, QChar('0'))) + " ";
-
-    return bytes;
-}
 void Steganography::encode(const QString& path, const QString& text)
 {
     //        if(!Utils::validateString(text, ONLY_UKRAINIAN_LETTERS))
     //            return;
 
-    QPixmap pixmap(path);
+    qDebug() << "encode" << path.mid(7, path.size()) << text;
+    QPixmap pixmap(path.mid(7, path.size()));
     QImage image = pixmap.toImage();
     QColor c = image.pixel(5,5);
-    QString bitStr = "1";//stringToByte(text);
+    QString bitStr = Utils::stringToBin(text);
     qDebug() << c << c.red() << c.green() << c.blue() << c.alpha() << bitStr;
 
     int i = 0, j = 0;
+
     auto column = pixmap.size().rwidth();
     for(const auto& bit : bitStr)
     {
-        int newByte;
         QColor color = image.pixel(i,j);
-        if(bit == '1')
-        {
-            if(color.blue()&1)
-                newByte = color.blue();
-            else
-                newByte = color.blue()+1;
-
-            qDebug() << "newByte" << newByte;
-        }
-        else
-        {
-            if(color.blue()&1)
-                newByte = color.blue();
-            else
-                newByte = color.blue()+1;
-        }
+        int newByte = (color.blue() + (1 + Steganography::L * QString(bit).toInt()) % 255) ;
 
         qDebug() << "old" << color.blue();
 
@@ -67,8 +43,9 @@ void Steganography::encode(const QString& path, const QString& text)
 
 QString Steganography::decode(const QString& firstPath, const QString& secondPath)
 {
-    QString encode = "/home/drago/Desktop/C++/Thesis/Thesis/encode.png";
-    QString normal = "/home/drago/Desktop/C++/Thesis/Thesis/close1.png";
+    qDebug() << "decode" << firstPath.mid(7, firstPath.size()) << secondPath.mid(7, secondPath.size());
+    QString encode = firstPath.mid(7, firstPath.size());
+    QString normal = secondPath.mid(7, secondPath.size());
 
     QPixmap pixmapEncode(encode);
     QImage imageEncode = pixmapEncode.toImage();
@@ -82,13 +59,17 @@ QString Steganography::decode(const QString& firstPath, const QString& secondPat
     QString result = "";
     while(true)
     {
+        qDebug() << "index" << i << j << "all size" << row << column;
         QColor colorEncode = imageEncode.pixel(i,j);
         QColor colorNormal = imageNormal.pixel(i,j);
         qDebug() << "value " << colorEncode.blue() << colorNormal.blue();
         if(colorEncode.blue() != colorNormal.blue())
         {
-            qDebug() << QString::number(colorEncode.blue(), 2);
-            result += QString::number(colorEncode.blue(), 2).back();
+            qDebug() << "find bit" << QString::number(colorEncode.blue(), 2);
+            int info = abs(colorEncode.blue() - colorNormal.blue()) / Steganography::L;
+            result += QString::number(info);
+        } else {
+            break;
         }
 
         if(j+1 == column)
@@ -100,9 +81,8 @@ QString Steganography::decode(const QString& firstPath, const QString& secondPat
             if(i+1 == row) break;
             ++j;
         }
-        break;
     }
 
-    qDebug() << "result" << result;
+    qDebug() << "result" << Utils::binToString(result);
     return result;
 }

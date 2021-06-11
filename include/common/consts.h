@@ -11,14 +11,14 @@ using TableType = QList<QList<List>>;
 
 /*Algorithm names*/
 const QString AS_CAESAR = "Алгоритм Цезаря";
-const QString AS_VIGENERA = "Алгоритм Виженера";
-const QString AS_PERMUTATION = "Простая перестановка";
-const QString AS_REPLACEMENT = "Алгоритм замены";
+const QString AS_VIGENERA = "Алгоритм Віженера";
+const QString AS_PERMUTATION = "Проста перестановка";
+const QString AS_REPLACEMENT = "Алгоритм заміни";
 const QString AS_SDES = "SDES";
 const QString AS_RC4 = "RC4";
 const QString AS_RSA = "RSA";
 const QString AS_AES = "AES";
-const QString AS_STEGANOGRAPHY = "Стеганография";
+const QString AS_STEGANOGRAPHY = "Стеганографія";
 
 /*SDES constants*/
 const QString IP = "ІР перестановку";

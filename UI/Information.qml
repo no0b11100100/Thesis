@@ -4,11 +4,20 @@ import QtQuick.Dialogs 1.3
 
 Rectangle {
     readonly property int minimunWidth: _row.width
+    property string value
     property variant mainModel
+
 
     signal resetText
 
     id: _root
+
+    Component {
+        id: _theory
+        TheoryWindow {
+            text: mainModel.theory
+        }
+    }
 
     Loader{
         id: _loader
@@ -80,7 +89,8 @@ Rectangle {
                             _loader.source = ""
                             if(_button.text == "Теорія")
                             {
-                                _loader.source = "qrc:/UI/TheoryWindow.qml"
+//                                _loader.source = "qrc:/UI/TheoryWindow.qml"
+                                _loader.sourceComponent = _theory
                             } else
                             {
                                 var labels = []
@@ -134,4 +144,8 @@ Rectangle {
     } // Column
 
     color: "black"
+
+    Component.onCompleted: {
+        console.log("Information", value)
+    }
 }

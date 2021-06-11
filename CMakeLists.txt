@@ -41,15 +41,15 @@ set(PROJECT_SOURCES
         include/algorithm/AES.h
         include/algorithm/Steganography.h
 
-        include/algorithm/CaesarCipher.cpp
-        include/algorithm/Replacement.cpp
-        include/algorithm/Vigenere.cpp
-        include/algorithm/Permutation.cpp
-        include/algorithm/RC4.cpp
-        include/algorithm/RSA.cpp
-        include/algorithm/SDES.cpp
-        include/algorithm/AES.cpp
-        include/algorithm/Steganography.cpp
+        src/CaesarCipher.cpp
+        src/Replacement.cpp
+        src/Vigenere.cpp
+        src/Permutation.cpp
+        src/RC4.cpp
+        src/RSA.cpp
+        src/SDES.cpp
+        src/AES.cpp
+        src/Steganography.cpp
         include/algorithm/Matrix.h
 
         UI/qml.qrc

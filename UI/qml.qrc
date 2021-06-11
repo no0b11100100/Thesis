@@ -9,8 +9,9 @@
         <file>Information.qml</file>
         <file>TheoryWindow.qml</file>
         <file>TableItem.qml</file>
-        <file>GragAndDropArea.qml</file>
+        <file>DragAndDropArea.qml</file>
         <file>ErrorWindow.qml</file>
+        <file>Steganofraphy.qml</file>
     </qresource>
     <qresource prefix="/">
         <file>TheoryWindow.qml</file>

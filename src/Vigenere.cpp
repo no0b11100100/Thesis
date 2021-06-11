@@ -102,8 +102,8 @@ ReturnType Vigenere::decode(const QString& text, const QString& key)
     m_description.GetContentDetails() += "В результаті отримуємо: " + encodeText + "\n";
     m_description.AddContent();
 
-        return {encodeText, m_description};
-    }
+    return {encodeText, m_description};
+}
 
 QString Vigenere::generateKey()
 {

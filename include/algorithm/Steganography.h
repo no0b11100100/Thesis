@@ -11,6 +11,7 @@ namespace Algorithm {
 class Steganography
 {
     static QString stringToByte(QString str);
+    static constexpr int L = 2;
 public:
     static void encode(const QString& path, const QString& text);
 

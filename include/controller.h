@@ -5,6 +5,13 @@
 #include <QPair>
 #include <memory>
 
+#include <QQmlComponent>
+#include <QtQuick/QQuickView>
+#include <QQmlEngine>
+#include <QtQuick/QQuickItem>
+#include <QQmlProperty>
+#include <QQmlApplicationEngine>
+
 #include "include/common/consts.h"
 
 #include "include/algorithm/Replacement.h"
@@ -16,6 +23,7 @@
 #include "include/algorithm/RC4.h"
 #include "include/algorithm/RSA.h"
 #include "include/algorithm/AES.h"
+#include "include/algorithm/Steganography.h"
 
 using namespace Algorithm;
 
@@ -32,6 +40,7 @@ class Controller : public QObject {
     Q_PROPERTY(QList<QList<QList<QString>>> tableInfo READ tableInfo NOTIFY tableModelChanged)
     Q_PROPERTY(QStringList algorithmsList READ algorithmsList CONSTANT)
     Q_PROPERTY(QString error READ error NOTIFY errorChanged)
+    Q_PROPERTY(QString theory READ theory NOTIFY viewChanged)
 
     QString m_algorithmName = algorithmsList().first();
     TextType m_texts;
@@ -42,7 +51,7 @@ class Controller : public QObject {
 
     void updateControls()
     {
-        static const List defaultTableValue{"","","","","","","","","","","","","","","",""};
+        static const List defaultTableValue{"0","1","2","3","2","0","1","3","3","0","1","0","2","1","0","3"};
         m_tableInfo = {};
         m_description = {};
         m_texts = {};
@@ -87,19 +96,19 @@ class Controller : public QObject {
         else if(m_algorithmName == AS_SDES)
         {
             m_texts = {
-                {TEXT, ""},
-                {KEY, ""},
-                {IP, ""},
-                {EXPANDED, ""},
-                {SBOX_PERMUTATION, ""},
-                {IP_1, ""},
-                {P_10, ""},
-                {P_8, ""},
+                {TEXT, "10010111"},
+                {KEY, "1010000010"},
+                {IP, "2,6,3,1,4,8,5,7"},
+                {EXPANDED, "4,1,2,3,2,3,4,1"},
+                {SBOX_PERMUTATION, "2,4,3,1"},
+                {IP_1, "4,1,3,5,7,2,8,6"},
+                {P_10, "3,5,2,7,4,10,1,9,8,6"},
+                {P_8, "6,3,7,4,8,5,10,9"},
                 {RESULT, ""}
             };
 
             m_tableInfo = {
-                {{"S-Box1"}, defaultTableValue},
+                {{"S-Box1"}, List{"1","0","3","2","3","2","1","0","0","2","1","3","3","1","3","2"}},
                 {{"S-Box2"}, defaultTableValue},
             };
 
@@ -132,15 +141,15 @@ class Controller : public QObject {
             };
             m_buttonsName = QStringList{GENERATE_KEY, ENCODE, THEORY};
         }
-        else if(m_algorithmName == AS_STEGANOGRAPHY)
-        {
-            m_texts = {
-                {TEXT, ""},
-//                {KEY, ""},
-//                {RESULT, ""}
-            };
-            m_buttonsName = QStringList{ENCODE, DECODE, THEORY};
-        }
+//        else if(m_algorithmName == AS_STEGANOGRAPHY)
+//        {
+//            m_texts = {
+//                {TEXT, ""},
+////                {KEY, ""},
+////                {RESULT, ""}
+//            };
+//            m_buttonsName = QStringList{ENCODE, DECODE, THEORY};
+//        }
     }
 
     QString encode(const QVector<QStringList>& tables, const TextType& pack)
@@ -164,7 +173,9 @@ class Controller : public QObject {
             std::tie(result, m_description) = RC4::encode(pack[0][1], pack[1][1]);
         else if(m_algorithmName == AS_RSA)
             std::tie(result, m_description) = RSA::encode(pack[0][1], pack[1][1]);
-        else if(m_algorithmName == AS_STEGANOGRAPHY) {}
+        else if(m_algorithmName == AS_AES)
+            std::tie(result, m_description) = AES::encode(pack[0][1], pack[1][1]);
+//        else if(m_algorithmName == AS_STEGANOGRAPHY) {}
 
         return result;
     }
@@ -182,7 +193,7 @@ class Controller : public QObject {
             std::tie(result, m_description) = Permutation::decode(pack[0][1], pack[1][1]);
         else if(m_algorithmName == AS_REPLACEMENT)
             std::tie(result, m_description) = Replacement::decode(pack[0][1], pack[1][1]);
-        else if(m_algorithmName == AS_STEGANOGRAPHY) {}
+//        else if(m_algorithmName == AS_STEGANOGRAPHY) {}
 
         return result;
     }
@@ -216,6 +227,8 @@ class Controller : public QObject {
         return "";
     }
 
+    QList<std::shared_ptr<QQuickItem>> m_components;
+
 signals:
     void viewChanged();
     void descriptionChanged();
@@ -231,42 +244,6 @@ public:
           m_error{""}
     {
         updateControls();
-//        auto GMul = [](int a, int b)
-//        {
-//            int el = 0;
-//            constexpr static int size{8};
-
-////            auto h = (a >> 7) & 1;
-////            el = a << 1;
-////            el ^= h * 0x1B;
-
-//            for(int i{0}; i < size; ++i)
-//            {
-//                if((b&1) != 0)
-//                    el ^= a;
-
-//                bool isHiBitSet = (a&0x80) != 0;
-//                a <<= 1;
-//                if(isHiBitSet)
-//                    a ^= 0x1B;
-
-//                b >>= 1;
-//            }
-
-//            return el;
-//        };
-
-//        qDebug() << "GMul" << GMul(9, 16);
-
-//        QString t = "abcdefghijklmnop";
-//        Matrix4X4 m(t);
-//        Algorithm::AES::encode("AESUSESAMATRIX", "");
-//        std::tie(std::ignore, m_description) = Algorithm::RSA::encode("data", "53 59");
-                //Algorithm::RC4::encode("HELLOWORLD", "KEY");
-                //Algorithm::Vigenere::encode("Криптографія", "Кібербезпека");
-                //Algorithm::Permutation::decode("рмупткзрнрнзкрїсваатеаиошоео", "3,1,4,2,5");
-                    //Algorithm::CaesarCipher::encode("Криптографія", "1");
-//                    Algorithm::CaesarCipher::decode("лсірупґсбхїа", "1");
     }
 
     QStringList algorithmsList() const
@@ -288,6 +265,11 @@ public:
     QStringList buttonsText() const { return m_buttonsName; }
     TableType tableInfo() const { return m_tableInfo; }
 
+    QString theory()
+    {
+        return "Test text";
+    }
+
     Q_INVOKABLE void setAlgorigthm(const QString& name)
     {
         m_algorithmName = name;
@@ -301,7 +283,7 @@ public:
 
     Q_INVOKABLE void trigger(const QString& action, const QVector<QStringList>& tables, const QList<QList<QString>>& pack)
     {
-        qDebug() << "trigger" << pack;
+        qDebug() << "trigger" << action;
 
 //        m_error = "something goes wrong\nplease try again";
 //        emit errorChanged();
@@ -327,6 +309,19 @@ public:
 
         emit textChanged();
         emit descriptionChanged();
+    }
+
+    Q_INVOKABLE QString trigger(const QString& action, const QString& str1, const QString& str2)
+    {
+        qDebug() << "trigger overload";
+
+        if(action == ENCODE)
+        {
+            Algorithm::Steganography::encode(str1, str2);
+            return str1;
+        }
+
+        return Algorithm::Steganography::decode(str1, str2);
     }
 
     QString error() const { return m_error; }

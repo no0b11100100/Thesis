@@ -5,6 +5,8 @@ Rectangle {
     property variant listModel
     property var callback
 
+    signal algorithmChanged(string name)
+
     id: _root
 
     ScrollView{
@@ -41,6 +43,7 @@ Rectangle {
                         _repeater.itemAt(_repeater.currentButton).backColor = "grey"
                         _repeater.currentButton = index
                         _repeater.itemAt(_repeater.currentButton).backColor = "green"
+                        algorithmChanged(_repeater.itemAt(_repeater.currentButton).text)
                     }
 
                     Component.onCompleted: {
