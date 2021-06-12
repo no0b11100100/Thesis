@@ -51,7 +51,7 @@ class Controller : public QObject {
 
     void updateControls()
     {
-        static const List defaultTableValue{"0","1","2","3","2","0","1","3","3","0","1","0","2","1","0","3"};
+        static const List defaultTableValue{"","","","","","","","","","","","","","","",""};
         m_tableInfo = {};
         m_description = {};
         m_texts = {};
@@ -96,23 +96,23 @@ class Controller : public QObject {
         else if(m_algorithmName == AS_SDES)
         {
             m_texts = {
-                {TEXT, "10010111"},
-                {KEY, "1010000010"},
-                {IP, "2,6,3,1,4,8,5,7"},
-                {EXPANDED, "4,1,2,3,2,3,4,1"},
-                {SBOX_PERMUTATION, "2,4,3,1"},
-                {IP_1, "4,1,3,5,7,2,8,6"},
-                {P_10, "3,5,2,7,4,10,1,9,8,6"},
-                {P_8, "6,3,7,4,8,5,10,9"},
+                {TEXT, ""},
+                {KEY, ""},
+                {IP, ""},
+                {EXPANDED, ""},
+                {SBOX_PERMUTATION, ""},
+                {IP_1, ""},
+                {P_10, ""},
+                {P_8, ""},
                 {RESULT, ""}
             };
 
             m_tableInfo = {
-                {{"S-Box1"}, List{"1","0","3","2","3","2","1","0","0","2","1","3","3","1","3","2"}},
+                {{"S-Box1"}, defaultTableValue},
                 {{"S-Box2"}, defaultTableValue},
             };
 
-            m_buttonsName = QStringList{GENERATE_KEY, ENCODE, THEORY};
+            m_buttonsName = QStringList{ENCODE, THEORY};
         }
         else if(m_algorithmName == AS_RC4)
         {
@@ -135,8 +135,8 @@ class Controller : public QObject {
         else if(m_algorithmName == AS_AES)
         {
             m_texts = {
-                {TEXT, "Two One Nine Two"},
-                {KEY, "Thats my Kung Fu"},
+                {TEXT, ""},
+                {KEY, ""},
                 {RESULT, ""}
             };
             m_buttonsName = QStringList{GENERATE_KEY, ENCODE, THEORY};
@@ -297,15 +297,15 @@ class Controller : public QObject {
         } else if(m_algorithmName == AS_REPLACEMENT)
         {
             return Replacement::generateKey();
-        } else if(m_algorithmName == AS_SDES)
-        {
-            return "";
         } else if(m_algorithmName == AS_RC4)
         {
-            return "";
+            return RC4::generateKey();
         } else if(m_algorithmName == AS_RSA)
         {
-            return "";
+            return RSA::generateKey();
+        } else if(m_algorithmName == AS_AES)
+        {
+            return AES::generateKey();
         }
 
         return "";
