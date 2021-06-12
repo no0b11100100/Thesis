@@ -135,8 +135,8 @@ class Controller : public QObject {
         else if(m_algorithmName == AS_AES)
         {
             m_texts = {
-                {TEXT, ""},
-                {KEY, ""},
+                {TEXT, "Two One Nine Two"},
+                {KEY, "Thats my Kung Fu"},
                 {RESULT, ""}
             };
             m_buttonsName = QStringList{GENERATE_KEY, ENCODE, THEORY};
