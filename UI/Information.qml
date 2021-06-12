@@ -15,6 +15,8 @@ Rectangle {
     Component {
         id: _theory
         TheoryWindow {
+            width: 600
+            height: 400
             text: mainModel.theory
         }
     }

@@ -351,7 +351,33 @@ public:
 
     QString theory()
     {
-        return "Test text";
+        if(m_algorithmName == AS_CAESAR)
+        {
+            return Algorithm::CaesarCipher::theory();
+        }else if(m_algorithmName == AS_VIGENERA)
+        {
+            return Algorithm::Vigenere::theory();
+        }else if(m_algorithmName == AS_PERMUTATION)
+        {
+             return Algorithm::Permutation::theory();
+        }else if(m_algorithmName == AS_REPLACEMENT)
+        {
+             return Algorithm::Replacement::theory();
+        }else if(m_algorithmName == AS_SDES)
+        {
+             return Algorithm::SDES::theory();
+        } else if(m_algorithmName == AS_RC4)
+        {
+             return Algorithm::RC4::theory();
+        }else if(m_algorithmName == AS_RSA)
+        {
+             return Algorithm::RSA::theory();
+        }else if(m_algorithmName == AS_AES)
+        {
+             return Algorithm::AES::theory();
+        }
+
+        return "";
     }
 
     Q_INVOKABLE void setAlgorigthm(const QString& name)

@@ -47,7 +47,7 @@ Window {
         Steganofraphy {
             width: _root.width - _choice.width
             height: _root.height
-            trigger: _model.trigger
+            trigger: _model.specialTrigger
         }
     }
 
