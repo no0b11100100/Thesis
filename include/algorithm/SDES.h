@@ -118,6 +118,8 @@ class SDES
 
 public:
     static ReturnType encode(const QVector<QStringList>&, const TextType&);
+
+    static bool validate(const QVector<QStringList>&, const TextType&);
 };
 
 } // namespace Algorithm

@@ -153,15 +153,18 @@ std::vector<QString> Permutation::makeDecodeTable(const QString& text, const int
     return table;
 }
 
-bool Permutation::validateKey(QStringList key)
+bool Permutation::validate(const QString & text, const QString& key)
 {
-    std::sort(key.begin(), key.end());
-    if(key.isEmpty() || key.back().toInt() != key.size()) return false;
-    for(auto it = key.cbegin(); it != std::prev(key.cend()); ++it)
-        if(it->toInt()+1 != std::next(it)->toInt())
-            return false;
+    auto validateKey = [](QString key)
+    {
+        key.remove(QChar(' '));
+        qDebug() << "validate" << key;
 
-    return true;
+        auto keyTable = key.split(",");
+
+        return !key.isEmpty() && Utils::validateSequence(keyTable);
+    };
+    return Utils::validateString(text, UKRAINIAN_ALPHABET) && validateKey(key);
 }
 
 ReturnType Permutation::encode(const QString& text, const QString& key)

@@ -32,6 +32,8 @@ class AES
 
 public:
     static ReturnType encode(const QString&, const QString&);
+
+    static bool validate(const QString&, const QString&);
 };
 
 } // namespace Algorithm

@@ -178,6 +178,15 @@ ReturnType AES::encode(const QString& text, const QString& key)
     return {textState.toString(), m_description};
 }
 
+bool AES::validate(const QString & text, const QString & key)
+{
+    auto tmpText = text;
+    auto tmpKey = key;
+    tmpText.remove(QChar(' '));
+    tmpKey.remove(QChar(' '));
+    return Utils::validateString(tmpText.simplified(), ENGLISH_ALPHABET) && Utils::validateString(tmpKey.simplified(), ENGLISH_ALPHABET);
+}
+
 Description::Description AES::m_description = Description::Description();
 std::array<Matrix4X4::Line, 10> AES::rcon{
     Matrix4X4::Line({1,0,0,0}),

@@ -26,13 +26,15 @@ class RSA
 
     static int findE(int eulerValue);
 
-    static bool validateKey(const QString& key);
+//    static bool validateKey(const QString& key);
 
     static Description::Description m_description;
 
 public:
 
     static ReturnType encode(const QString& text, const QString& key);
+
+    static bool validate(const QString&, const QString&);
 };
 
 } // namespace Algorithm

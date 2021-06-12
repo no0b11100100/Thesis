@@ -68,4 +68,14 @@ QString Replacement::generateKey()
     return key;
 }
 
+bool Replacement::validate(const QString & text, const QString & key)
+{
+    auto validateKey = [](const QString& key)
+    {
+        if(key.size() != UKRAINIAN_ALPHABET_SIZE) return false;
+        return std::is_permutation(UKRAINIAN_ALPHABET.cbegin(), UKRAINIAN_ALPHABET.cend(), key.cbegin());
+    };
+    return Utils::validateString(text, UKRAINIAN_ALPHABET) && validateKey(key);
+}
+
 Description::Description Replacement::m_description = Description::Description();

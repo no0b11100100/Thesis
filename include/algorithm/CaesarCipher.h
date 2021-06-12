@@ -27,6 +27,8 @@ public:
 
     static QString generateKey();
 
+    static bool validate(const QString&, const QString&);
+
 };
 
 } // namespace Algorithm

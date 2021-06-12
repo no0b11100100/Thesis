@@ -158,24 +158,79 @@ class Controller : public QObject {
         QString result = "";
         assert(pack.size() == m_texts.size());
         if(m_algorithmName == AS_CAESAR)
-            std::tie(result, m_description) = CaesarCipher::encode(pack[0][1], pack[1][1]);
-        else if(m_algorithmName == AS_VIGENERA)
-            std::tie(result, m_description) = Vigenere::encode(pack[0][1], pack[1][1]);
-        else if(m_algorithmName == AS_PERMUTATION)
-            std::tie(result, m_description) = Permutation::encode(pack[0][1], pack[1][1]);
-        else if(m_algorithmName == AS_REPLACEMENT)
-            std::tie(result, m_description) = Replacement::encode(pack[0][1], pack[1][1]);
-        else if(m_algorithmName == AS_SDES)
         {
-            assert(!tables[0].isEmpty() && !tables[1].isEmpty());
-            std::tie(result, m_description) = SDES::encode(tables, pack);
+            if(CaesarCipher::validate(pack[0][1], pack[1][1]))
+                std::tie(result, m_description) = CaesarCipher::encode(pack[0][1], pack[1][1]);
+            else
+            {
+                m_error = ERROR_TEXT;
+                emit errorChanged();
+            }
+        }else if(m_algorithmName == AS_VIGENERA)
+        {
+            if(Vigenere::validate(pack[0][1], pack[1][1]))
+                std::tie(result, m_description) = Vigenere::encode(pack[0][1], pack[1][1]);
+            else
+            {
+                m_error = ERROR_TEXT;
+                emit errorChanged();
+            }
+        }else if(m_algorithmName == AS_PERMUTATION)
+        {
+            if(Permutation::validate(pack[0][1], pack[1][1]))
+                std::tie(result, m_description) = Permutation::encode(pack[0][1], pack[1][1]);
+            else
+            {
+                m_error = ERROR_TEXT;
+                emit errorChanged();
+            }
+        }else if(m_algorithmName == AS_REPLACEMENT)
+        {
+            if(Replacement::validate(pack[0][1], pack[1][1]))
+                std::tie(result, m_description) = Replacement::encode(pack[0][1], pack[1][1]);
+            else
+            {
+                m_error = ERROR_TEXT;
+                emit errorChanged();
+            }
+        }else if(m_algorithmName == AS_SDES)
+        {
+            if(SDES::validate(tables, pack))
+                std::tie(result, m_description) =  SDES::encode(tables, pack);
+            else
+            {
+                m_error = ERROR_TEXT;
+                emit errorChanged();
+            }
         } else if(m_algorithmName == AS_RC4)
-            std::tie(result, m_description) = RC4::encode(pack[0][1], pack[1][1]);
-        else if(m_algorithmName == AS_RSA)
-            std::tie(result, m_description) = RSA::encode(pack[0][1], pack[1][1]);
-        else if(m_algorithmName == AS_AES)
-            std::tie(result, m_description) = AES::encode(pack[0][1], pack[1][1]);
-//        else if(m_algorithmName == AS_STEGANOGRAPHY) {}
+        {
+            if(RC4::validate(pack[0][1], pack[1][1]))
+                std::tie(result, m_description) = RC4::encode(pack[0][1], pack[1][1]);
+            else
+            {
+                m_error = ERROR_TEXT;
+                emit errorChanged();
+            }
+        }else if(m_algorithmName == AS_RSA)
+        {
+            if(RSA::validate(pack[0][1], pack[1][1]))
+                std::tie(result, m_description) = RSA::encode(pack[0][1], pack[1][1]);
+            else
+            {
+                m_error = ERROR_TEXT;
+                emit errorChanged();
+            }
+        }else if(m_algorithmName == AS_AES)
+        {
+            if(AES::validate(pack[0][1], pack[1][1]))
+                std::tie(result, m_description) = AES::encode(pack[0][1], pack[1][1]);
+            else
+            {
+                m_error = ERROR_TEXT;
+                emit errorChanged();
+            }
+//            std::tie(result, m_description) = AES::encode(pack[0][1], pack[1][1]);
+        }
 
         return result;
     }
@@ -185,15 +240,44 @@ class Controller : public QObject {
         qDebug() << "DECODING DATA " << pack[0][1] << pack[1][1] << " ALGO " << m_algorithmName;
         QString result = "";
         assert(pack.size() == m_texts.size());
+
         if(m_algorithmName == AS_CAESAR)
-            std::tie(result, m_description) = CaesarCipher::decode(pack[0][1], pack[1][1]);
-        else if(m_algorithmName == AS_VIGENERA)
-            std::tie(result, m_description) = Vigenere::decode(pack[0][1], pack[1][1]);
-        else if(m_algorithmName == AS_PERMUTATION)
-            std::tie(result, m_description) = Permutation::decode(pack[0][1], pack[1][1]);
-        else if(m_algorithmName == AS_REPLACEMENT)
-            std::tie(result, m_description) = Replacement::decode(pack[0][1], pack[1][1]);
-//        else if(m_algorithmName == AS_STEGANOGRAPHY) {}
+        {
+            if(CaesarCipher::validate(pack[0][1], pack[1][1]))
+                std::tie(result, m_description) = CaesarCipher::decode(pack[0][1], pack[1][1]);
+            else
+            {
+                m_error = ERROR_TEXT;
+                emit errorChanged();
+            }
+        }else if(m_algorithmName == AS_VIGENERA)
+        {
+            if(Vigenere::validate(pack[0][1], pack[1][1]))
+                std::tie(result, m_description) = Vigenere::decode(pack[0][1], pack[1][1]);
+            else
+            {
+                m_error = ERROR_TEXT;
+                emit errorChanged();
+            }
+        }else if(m_algorithmName == AS_PERMUTATION)
+        {
+            if(Permutation::validate(pack[0][1], pack[1][1]))
+                std::tie(result, m_description) = Permutation::decode(pack[0][1], pack[1][1]);
+            else
+            {
+                m_error = ERROR_TEXT;
+                emit errorChanged();
+            }
+        }else if(m_algorithmName == AS_REPLACEMENT)
+        {
+            if(Replacement::validate(pack[0][1], pack[1][1]))
+                std::tie(result, m_description) = Replacement::decode(pack[0][1], pack[1][1]);
+            else
+            {
+                m_error = ERROR_TEXT;
+                emit errorChanged();
+            }
+        }
 
         return result;
     }
@@ -311,7 +395,7 @@ public:
         emit descriptionChanged();
     }
 
-    Q_INVOKABLE QString trigger(const QString& action, const QString& str1, const QString& str2)
+    Q_INVOKABLE QString specialTrigger(const QString& action, const QString& str1, const QString& str2)
     {
         qDebug() << "trigger overload";
 

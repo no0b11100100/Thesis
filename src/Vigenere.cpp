@@ -36,11 +36,13 @@ void Vigenere::createTableDescription(const Vigenere::TableType& table)
     m_description.AddContent();
 }
 
+bool Vigenere::validate(const QString &text, const QString & key)
+{
+    return Utils::validateString(text, UKRAINIAN_ALPHABET) && Utils::validateString(key, UKRAINIAN_ALPHABET);
+}
+
 ReturnType Vigenere::encode(const QString& text, const QString& key)
 {
-    //        if(!Utils::validateString(text, ONLY_UKRAINIAN_LETTERS) || !Utils::validateString(text, ONLY_UKRAINIAN_LETTERS))
-    //            return "";
-
     auto table = fillTable();
     auto encodeText = text;
     auto it = key.cbegin();

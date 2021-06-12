@@ -164,16 +164,26 @@ public:
         return result;
     }
 
-    static bool validateString(QString text, const QString& re)
+    static bool validateString(const QString& text, const QString& alphabet)
     {
-        QRegExp regex(re);
-        //regex.setPatternSyntax(QRegExp::Wildcard);
-        return regex.exactMatch(text);
-//        QRegularExpressionValidator v(regexp, 0);
-//        int pos = 0;
-//        auto res = v.validate(text,pos);
-//        qDebug() << res;
-//        return res == QValidator::Acceptable;
+        for(const auto& v : text)
+            if(!std::any_of(alphabet.cbegin(), alphabet.cend(), [&](const QChar& c)
+            {
+                return v.toLower() == c;
+            }))
+                return false;
+
+        return !text.isEmpty();
+    }
+
+    static bool validateSequence(const QStringList& sequence)
+    {
+        qDebug() << "validateSequence" << sequence;
+        for(int i = 0; i < sequence.size(); ++i)
+            if(std::find(sequence.cbegin(), sequence.cend(), QString::number(i+1)) == sequence.cend() )
+                return false;
+
+        return !sequence.isEmpty();
     }
 
     static bool validateStringList(const QStringList& list)

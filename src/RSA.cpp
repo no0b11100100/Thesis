@@ -43,16 +43,16 @@ int RSA::findE(int eulerValue)
     return -1;
 }
 
-bool RSA::validateKey(const QString& key)
-{
-    if(!Utils::validateString(key, ONLY_NUMBERS_RE))
-        return false;
+//bool RSA::validateKey(const QString& key)
+//{
+//    if(!Utils::validateString(key, ONLY_NUMBERS_RE))
+//        return false;
 
-    auto values = key.split(' ');
-    if(values.size() != 2) return false;
+//    auto values = key.split(' ');
+//    if(values.size() != 2) return false;
 
-    return true;
-}
+//    return true;
+//}
 
 ReturnType RSA::encode(const QString& text, const QString& key)
 {
@@ -86,6 +86,24 @@ ReturnType RSA::encode(const QString& text, const QString& key)
 
     m_description.AddContent();
     return {result, m_description};
+}
+
+bool RSA::validate(const QString &text, const QString &key)
+{
+    auto validateKey = [](const QString &key)
+    {
+        auto data = key.simplified();
+        auto values = key.split(' ');
+        if(values.size() != 2) return false;
+
+        auto [P, Q] = parseKey(data);
+        auto n = P*Q;
+        auto U = EulerFuntion(P, Q);
+        auto e = findE(U);
+
+        return e != -1;
+    };
+    return Utils::validateString(text, ENGLISH_ALPHABET) && validateKey(key);
 }
 
 Description::Description RSA::m_description = Description::Description();

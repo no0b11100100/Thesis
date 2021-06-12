@@ -39,6 +39,7 @@ const QString ONLY_UKRAINIAN_LETTERS = "[абвгґдеєжзиіїйклмно�
 const QString ONLY_ENGLISH_LETTERS = "[a-zA-Z]";
 const QString ONLY_NUMBERS_RE = "[0-9]";
 const QString ONLY_BINARY_RE = "[0-1]";
+//const QString ONLY_HEX = "0123456789abcdef";
 
 /*Validate permutation regexps*/
 const QStringList PERMUTATION_4 = {"1", "2", "3", "4"};
@@ -67,3 +68,5 @@ const QString KEY_GENERATION = "Формування ключа";
 /*Text formating*/
 const QString TAB = "    ";
 const QString DOUBLE_TAB = TAB + TAB;
+
+const QString ERROR_TEXT = "Неправильні дані";

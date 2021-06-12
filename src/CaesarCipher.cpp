@@ -101,4 +101,16 @@ QString CaesarCipher::generateKey()
     return keys.front();
 }
 
+bool CaesarCipher::validate(const QString & text, const QString & key)
+{
+    auto validateKey = [](const QString& key)
+    {
+        bool isNumbaers;
+        int iKey = key.toInt(&isNumbaers);
+        return !key.isEmpty() && key.size() <= 2 && isNumbaers && iKey >= 0 && iKey < UKRAINIAN_ALPHABET_SIZE;
+    };
+
+    return Utils::validateString(text, UKRAINIAN_ALPHABET) && validateKey(key);
+}
+
 Description::Description CaesarCipher::m_description = Description::Description();

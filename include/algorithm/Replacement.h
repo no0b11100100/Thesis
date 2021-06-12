@@ -26,6 +26,8 @@ public:
     static ReturnType decode( const QString& text, const QString& permutationAlphabet);
 
     static QString generateKey();
+
+    static bool validate(const QString&, const QString&);
 };
 
 } // namespace Algorithm

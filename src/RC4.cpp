@@ -115,4 +115,11 @@ ReturnType RC4::encode(const QString& plainText, const QString& key)
     return {chipherText, m_description};
 }
 
+bool RC4::validate(const QString & text, const QString & key)
+{
+    auto tmpText = text;
+    tmpText.remove(QChar(' '));
+    return Utils::validateString(tmpText.simplified(), ENGLISH_ALPHABET) && Utils::validateString(key, ENGLISH_ALPHABET);
+}
+
 Description::Description RC4::m_description = Description::Description();

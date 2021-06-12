@@ -193,4 +193,43 @@ ReturnType SDES::encode(const QVector<QStringList>& tables, const TextType& pack
     return {result, m_description};
 }
 
+bool SDES::validate(const QVector<QStringList> & tables, const TextType & pack)
+{
+        constexpr int P_10Index = 6;
+        constexpr int P_8Index = 7;
+        constexpr int IPIndex = 2;
+        constexpr int EXPANDEDIndex = 3;
+        constexpr int SBOX_PERMUTATIONIndex = 4;
+        constexpr int IP_1Index = 5;
+        constexpr int TEXTIndex = 0;
+        constexpr int KEYIndex = 1;
+    auto validateTable = [](const QStringList& list)
+    {
+        const int min = 0;
+        const int max = 3;
+        qDebug() << "validate" << list;
+        for(const auto& v : list)
+        {
+            if(v.size() != 1) return false;
+            bool isNumber;
+            int iValue = v.toInt(&isNumber);
+
+            if(!isNumber || (iValue < min || iValue > max)) return false;
+        }
+
+        qDebug() << "validate" << !list.isEmpty();
+        return !list.isEmpty();
+    };
+
+    if(tables.isEmpty() || tables.size() != 2) return false;
+    if(tables.at(0).isEmpty() || tables.at(1).isEmpty() ||
+            !validateTable(tables.at(0)) || !validateTable(tables.at(1)))
+        return false;
+
+    return Utils::validateString(pack.at(TEXTIndex).at(1), "01") && Utils::validateString(pack.at(KEYIndex).at(1), "01") &&
+            Utils::validateSequence(pack.at(SBOX_PERMUTATIONIndex).at(1).split(QChar(','))) && Utils::validateSequence(pack.at(P_10Index).at(1).split(QChar(','))) &&
+            Utils::validateSequence(pack.at(P_8Index).at(1).split(QChar(','))) && Utils::validateSequence(pack.at(IPIndex).at(1).split(QChar(','))) &&
+            Utils::validateSequence(pack.at(EXPANDEDIndex).at(1).split(QChar(','))) && Utils::validateSequence(pack.at(IP_1Index).at(1).split(QChar(',')));
+}
+
 Description::Description SDES::m_description = Description::Description();

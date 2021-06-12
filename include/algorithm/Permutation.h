@@ -25,8 +25,6 @@ private:
 
     static std::vector<QString> makeDecodeTable(const QString& text, const int& keyLegth, const QStringList& key);
 
-    static bool validateKey(QStringList key);
-
     static Description::Description m_description;
 
 public:
@@ -35,6 +33,8 @@ public:
     static ReturnType decode(const QString& text, const QString& key);
 
     static QString generateKey();
+
+    static bool validate(const QString& , const QString&);
 };
 
 } // namespace Algorithm
