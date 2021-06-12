@@ -181,7 +181,12 @@ ReturnType AES::encode(const QString& text, const QString& key)
     auto keyState = Matrix4X4(key);
 //    keyState.Print();
 //    qDebug() << "";
-    auto textState = Matrix4X4(text);
+    QString expanded = "";
+    if(text.size() != 16)
+        for(int i = 0; i < 16 - text.size(); ++i)
+            expanded.push_back("0");
+
+    auto textState = Matrix4X4(text + expanded);
 //    textState.Print();
 //    qDebug() << "";
     m_description.GetContentDetails() += TAB + "Initial round: робимо XOR тексту та ключа:\n" +
@@ -208,6 +213,7 @@ ReturnType AES::encode(const QString& text, const QString& key)
 
 bool AES::validate(const QString & text, const QString & key)
 {
+    if(key.size() != 16 || text.size() > 16) return false;
     auto tmpText = text;
     auto tmpKey = key;
     tmpText.remove(QChar(' '));
