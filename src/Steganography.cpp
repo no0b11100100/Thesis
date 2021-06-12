@@ -84,5 +84,5 @@ QString Steganography::decode(const QString& firstPath, const QString& secondPat
     }
 
     qDebug() << "result" << Utils::binToString(result);
-    return result;
+    return Utils::binToString(result);
 }
