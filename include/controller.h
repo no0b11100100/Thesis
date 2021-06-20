@@ -24,6 +24,7 @@
 #include "include/algorithm/RSA.h"
 #include "include/algorithm/AES.h"
 #include "include/algorithm/Steganography.h"
+#include "include/algorithm/xor.h"
 
 using namespace Algorithm;
 
@@ -328,6 +329,8 @@ public:
           m_error{""}
     {
         updateControls();
+        XOR::encode("data", "hell");
+        XOR::decode("0c04180d", "hell");
     }
 
     QStringList algorithmsList() const

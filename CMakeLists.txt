@@ -40,6 +40,7 @@ set(PROJECT_SOURCES
         include/algorithm/SDES.h
         include/algorithm/AES.h
         include/algorithm/Steganography.h
+        include/algorithm/xor.h
 
         src/CaesarCipher.cpp
         src/Replacement.cpp
@@ -50,6 +51,7 @@ set(PROJECT_SOURCES
         src/SDES.cpp
         src/AES.cpp
         src/Steganography.cpp
+        src/xor.cpp
         include/algorithm/Matrix.h
 
         UI/qml.qrc

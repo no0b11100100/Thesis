@@ -13,36 +13,6 @@
 class Utils
 {
     template<class Iterator>
-    static QChar hexToBinary(Iterator& it, Iterator end)
-    {
-        static const std::unordered_map<QString, QChar> fromBinaryTo
-        {
-            {"0000", '0'},
-            {"0001", '1'},
-            {"0010", '2'},
-            {"0011", '3'},
-            {"0100", '4'},
-            {"0101", '5'},
-            {"0110", '6'},
-            {"0111", '7'},
-            {"1000", '8'},
-            {"1001", '9'},
-            {"1010", 'A'},
-            {"1011", 'B'},
-            {"1100", 'C'},
-            {"1101", 'D'},
-            {"1110", 'E'},
-            {"1111", 'F'},
-        };
-        QString chan(4, '0');
-
-        for(auto chanIt = chan.rbegin(); chanIt != chan.rend() && it != end; ++chanIt, ++it)
-            *chanIt = *it;
-
-        return fromBinaryTo.at(chan);
-    }
-
-    template<class Iterator>
     static void shift(Iterator start, Iterator end)
     {
         auto tmp = *start;
@@ -95,17 +65,13 @@ public:
         return res;
     }
 
-    static QString binToHex(const QString& binStr)
+    static QChar hexToChar(const QString hex)
     {
-        QString result = "";
-        for(auto it = binStr.crbegin(); it != binStr.crend();)
-        {
-            QChar symbol = hexToBinary(it, binStr.crend());
-            result.push_front(symbol);
-        }
-
-        qDebug() << result;
-        return result;
+        assert(hex.size() == 2);
+        bool status = false;
+        unsigned hexValue = hex.toUInt(&status, 16);
+        assert(status == true);
+        return QChar(hexValue);
     }
 
     enum class ShiftDirection : bool
@@ -162,6 +128,19 @@ public:
         }
 
         return result;
+    }
+
+    static QString prettyHex(const QString& str)
+    {
+        QString hex = "";
+        for(const auto& c : str)
+        {
+            auto hexValue = c.cell();
+            auto convertHex = QString::number(hexValue, 16);
+            hex += convertHex.size() == 1 ? "0" + convertHex : convertHex;
+        }
+
+        return hex;
     }
 
     static bool validateString(const QString& text, const QString& alphabet)
