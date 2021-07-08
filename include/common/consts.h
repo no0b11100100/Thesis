@@ -33,6 +33,7 @@ const QString ENGLISH_ALPHABET = "abcdefghijklmnopqrstuvwxyz";
 const QString UKRAINIAN_ALPHABET = "абвгґдеєжзиіїйклмнопрстуфхцчшщьюя";
 constexpr int UKRAINIAN_ALPHABET_SIZE = 33;
 constexpr int ENGLISH_ALPHABET_SIZE = 26;
+const QString BASE_64_TEXT = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 /";
 
 /*Validate text regexps*/
 const QString ONLY_UKRAINIAN_LETTERS = "[абвгґдеєжзиіїйклмнопрстуфхцчшщьюяАБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯ]";
