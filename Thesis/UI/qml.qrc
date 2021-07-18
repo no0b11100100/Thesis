@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>Views/DefaultView.qml</file>
+        <file>Views/ViewWithTables.qml</file>
+    </qresource>
+</RCC>
