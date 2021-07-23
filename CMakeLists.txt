@@ -26,40 +26,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick REQUIRED)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test)
 
 set(PROJECT_SOURCES
         main.cpp
-        include/algorithm/CaesarCipher.h
-        include/algorithm/Replacement.h
-        include/controller.h
-        include/algorithm/Vigenere.h
-        include/algorithm/Permutation.h
-        include/algorithm/RC4.h
-        include/algorithm/RSA.h
-        include/algorithm/SDES.h
-        include/algorithm/AES.h
-        include/algorithm/Steganography.h
-        include/algorithm/xor.h
 
-        src/CaesarCipher.cpp
-        src/Replacement.cpp
-        src/Vigenere.cpp
-        src/Permutation.cpp
-        src/RC4.cpp
-        src/RSA.cpp
-        src/SDES.cpp
-        src/AES.cpp
-        src/Steganography.cpp
-        src/xor.cpp
-        include/algorithm/Matrix.h
-
-        UI/qml.qrc
-        UI/icons/open.png
-        UI/icons/close.png
-        include/common/consts.h
-        include/common/utils.h
-        include/Description.h
+        qml.qrc
+        xor.cpp
+        xor.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

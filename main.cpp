@@ -11,6 +11,8 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     qmlRegisterType<Controller::Controller, 1>("MyModel", 1, 0, "Controller");
+    qmlRegisterUncreatableType<Controller::DefaultView>("View1", 1, 0, "DefaultView", "just model");
+    qmlRegisterUncreatableType<Controller::DefaultViewWithTables>("View2", 1, 0, "DefaultViewWithTables", "just model");
 
     const QUrl url(QStringLiteral("qrc:/UI/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

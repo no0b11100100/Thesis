@@ -22,6 +22,12 @@ public:
 
     QObject* view() { return m_algorithms.at("XOR")->model(); }
 
+    Q_INVOKABLE void foo(QObject* o)
+    {
+        o->setProperty("source", QString("UI/Views/DefaultView.qml"));
+    }
+
+
 public:
     std::unordered_map<QString, std::unique_ptr<Algorithms::Interface>> m_algorithms;
 };

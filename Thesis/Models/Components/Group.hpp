@@ -23,12 +23,12 @@ public:
 
     Q_INVOKABLE QObject* at(int index) { return m_items.at(index).get(); }
 
-    template<class Info>
+    template<class T, class Info>
     void addItem(const Info& info)
     {
-//        auto item = std::make_unique<T>();
-//        item->setData(info);
-//        m_items.push_back(std::move(item));
+        auto item = std::make_unique<T>();
+        item->setData(info);
+        m_items.push_back(std::move(item));
     }
 
     QObject* getItem(int index) { return m_items.at(index).get(); }

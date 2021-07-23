@@ -12,9 +12,19 @@ void Algorithms::XOR::initButtons()
     m_model->addButton(dec);
 }
 
+void Algorithms::XOR::initLabels()
+{
+    Components::LabelInfo label("input", "", "enter string", true, [](const QString&){ return true; });
+    m_model->addLabel(label);
+
+    Components::LabelInfo label1("input1", "", "enter string1", false, [](const QString&){ return false; });
+    m_model->addLabel(label1);
+}
+
 void Algorithms::XOR::initModel()
 {
     initButtons();
+    initLabels();
 }
 
 Algorithms::XOR::XOR()

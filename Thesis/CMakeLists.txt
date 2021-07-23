@@ -27,10 +27,29 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick REQUIRED)
 
+#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/UI)
+#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Algorithms)
+
 set(PROJECT_SOURCES
         main.cpp
-        MainModel.hpp
-        qml.qrc
+
+        Models/MainModel.hpp
+        Models/DefaultModel.hpp
+        Models/ModelWithTables.hpp
+
+        Models/Components/Button.hpp
+        Models/Components/Label.hpp
+        Models/Components/Table.hpp
+        Models/Components/Group.hpp
+
+        common/const.hpp
+
+        Algorithms/Interface.hpp
+
+        Algorithms/XOR/xor.cpp
+        Algorithms/XOR/xor.h
+
+        UI/qml.qrc
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

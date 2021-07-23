@@ -27,13 +27,14 @@ public:
 
 class Button : public QObject
 {
-    ButtonInfo m_info;
+    Q_OBJECT
     Q_PROPERTY(QString text READ text CONSTANT)
+
+    ButtonInfo m_info;
 
 public:
     Button(QObject* parent = nullptr)
-        : QObject{parent},
-          m_info{ButtonInfo{"data", [](){}}}
+        : QObject{parent}
     {}
 
     void setData(const ButtonInfo& info) { m_info = info; }

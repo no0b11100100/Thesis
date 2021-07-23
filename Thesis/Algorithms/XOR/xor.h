@@ -11,6 +11,7 @@ class XOR : public Interface
 {
     std::unique_ptr<Model::DefaultView> m_model;
     void initButtons();
+    void initLabels();
     void initModel();
 public:
     XOR();
