@@ -2,22 +2,51 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 Rectangle {
-    property int width
-    property int height
     property variant model
 
     id: _root
-    width: _root.width
-    height: _root.height
+
+    color: "grey"
 
     Column {
+        spacing: 1
         Repeater {
             model: _root.model.size
 
             TextArea {
-                placeholderText: _root.model.at(index).placeholdertext
-                font.pointSize: 24
-            }
-        }
-    }
+                readonly property variant label: _root.model.at(index)
+                id: _text
+                placeholderText: label.placeholderText
+                text: label.text
+                readOnly: label.isReadOnly
+                font.pointSize: 16
+
+                background: Rectangle {
+                    color: "white"
+                    width: _root.width
+                    height: _text.height
+                }
+
+                onTextChanged: {
+                    if (_text.label.isEditing === true) {
+                        if(_text.text.charAt(_text.text.length-1) == ' ') {
+                            _text.text = _text.text.substring(0, _text.text.length-1)
+                            _text.cursorPosition = _text.length
+                        }
+                    }
+                }
+
+                onEditingFinished: {
+                    if(_text.label.validate(_text.text)) {
+                        _text.label.text = _text.text
+                        _text.background.color = "white"
+                    } else {
+                        console.log("validate failed")
+                        _text.background.color = "red"
+                    }
+                }
+
+            } // TextArea
+        } // Repeater
+    } // Column
 }

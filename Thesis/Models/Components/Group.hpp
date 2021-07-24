@@ -31,8 +31,6 @@ public:
         m_items.push_back(std::move(item));
     }
 
-    QObject* getItem(int index) { return m_items.at(index).get(); }
-
 private:
 
     std::vector<std::unique_ptr<QObject>> m_items;

@@ -48,6 +48,9 @@ set(PROJECT_SOURCES
 
         Algorithms/XOR/xor.cpp
         Algorithms/XOR/xor.h
+        Algorithms/XOR/const.h
+        Algorithms/XOR/Impl/xorImpl.cpp
+        Algorithms/XOR/Impl/xorImpl.h
 
         UI/qml.qrc
 )

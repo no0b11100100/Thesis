@@ -4,6 +4,8 @@ import QtQuick.Controls 2.15
 
 import ViewModel 1.0
 
+import "Components"
+
 Window {
     id: _root
     width: 640
@@ -15,53 +17,23 @@ Window {
         id: _model
     }
 
-    Rectangle {
-        width: _root.width
-        height: _root.height
+    Column {
 
-        color: "grey"
+        spacing: 2
+        LabelArea {
+            id: _labels
+            width: _root.width
+            height: _root.height-100
+            model: _model.view.labels
+        }
 
-        Column {
-            Repeater {
-                model: _model.view.labels.size
+        ButtonArea {
+            width: _root.width
+            height: 50
+            model: _model.view.buttons
+        }
 
-                TextArea {
-                    readonly property variant label: _model.view.labels.at(index)
-                    id: _text
-                    placeholderText: label.placeholderText
-                    text: label.text
-                    font.pointSize: 24
-
-                    background: Rectangle {
-                        color: "white"
-                        width: _root.width
-                        height: _text.height
-                    }
-
-                    onTextChanged: {
-                        if (_text.label.isEditing === true) {
-                            if(_text.text.charAt(_text.text.length-1) == ' ') {
-                                _text.text = _text.text.substring(0, _text.text.length-1)
-                                _text.cursorPosition = _text.length
-                            }
-                        }
-                    }
-
-                    onEditingFinished: {
-                        if(_text.label.validate(_text.text)) {
-                            _text.label.text = _text.text
-                            _text.background.color = "white"
-                        } else {
-                            console.log("validate failed")
-                            _text.background.color = "red"
-                        }
-                    }
-
-                } // TextArea
-            } // Repeater
-        } // Column
     }
-
 
 
 //    Component.onCompleted: {

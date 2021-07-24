@@ -12,14 +12,16 @@ class LabelInfo
     QString m_placeholderText;
     bool isEditing;
     int m_lineCount;
+    bool m_isReadOnly;
     std::function<bool(const QString&)> m_validate;
 
 public:
     LabelInfo() = default;
+
     LabelInfo(const QString& name, const QString& text, const QString& placeholderText,
-              bool ignoreWhitespaces, std::function<bool(const QString&)> validator)
+              bool ignoreWhitespaces, bool isReadOnly, std::function<bool(const QString&)> validator)
         : m_name{name}, m_text{text}, m_placeholderText{placeholderText},
-          isEditing{ignoreWhitespaces}, m_lineCount{0}, m_validate{validator}
+          isEditing{ignoreWhitespaces}, m_lineCount{0}, m_isReadOnly{isReadOnly}, m_validate{validator}
     {}
 
     void setName(const QString& name) { m_name = name; }
@@ -39,6 +41,8 @@ public:
 
     void setValidator(std::function<bool(const QString&)> validate) { m_validate = validate; }
     bool executeValidator(const QString& text) { return m_validate(text); }
+
+    bool getIsReadOnly() const { return m_isReadOnly; }
 };
 
 
@@ -46,12 +50,16 @@ class Label : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString text READ text WRITE setText /*NOTIFY*/)
+    Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
     Q_PROPERTY(QString placeholderText READ placeholderText /*NOTIFY*/)
-    Q_PROPERTY(QString isEditing READ getIsEditing CONSTANT)
-    Q_PROPERTY(QString lineCount READ getLineCount CONSTANT)
+    Q_PROPERTY(bool isEditing READ getIsEditing CONSTANT)
+    Q_PROPERTY(int lineCount READ getLineCount CONSTANT)
+    Q_PROPERTY(bool isReadOnly READ getIsReadOnly CONSTANT)
 
     LabelInfo m_info;
+
+signals:
+    void textChanged();
 
 public:
     Label(QObject* parent = nullptr)
@@ -71,6 +79,8 @@ public:
 
     bool getIsEditing() const { return m_info.getIsEditing(); }
     void setIsEditing(bool value) { m_info.setIsEditing(value); }
+
+    bool getIsReadOnly() const { return m_info.getIsReadOnly(); }
 
     int getLineCount() const { return m_info.getLineCount(); }
     void setLineCount(int lineCount) { m_info.setLineCount(lineCount); }

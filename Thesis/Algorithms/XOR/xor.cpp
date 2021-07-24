@@ -1,24 +1,28 @@
 #include "xor.h"
+#include "const.h"
 
 void Algorithms::XOR::initButtons()
 {
-    Components::ButtonInfo key("generate", [&](){ generateKey(); });
-    m_model->addButton(key);
+    Components::ButtonInfo generateKeyButton(GENERATE_KEY, [&](){ generateKey(); });
+    m_model->addButton(generateKeyButton);
 
-    Components::ButtonInfo enc("encode", [&](){ encode(); });
-    m_model->addButton(enc);
+    Components::ButtonInfo encodeButton(ENCODE, [&](){ encode(); });
+    m_model->addButton(encodeButton);
 
-    Components::ButtonInfo dec("decode", [&](){ decode(); });
-    m_model->addButton(dec);
+    Components::ButtonInfo decodeButton(DECODE, [&](){ decode(); });
+    m_model->addButton(decodeButton);
 }
 
 void Algorithms::XOR::initLabels()
 {
-    Components::LabelInfo label("input", "", "enter string", true, [](const QString&){ return true; });
-    m_model->addLabel(label);
+    Components::LabelInfo input(INPUT, "", INPUT, true, false, [](const QString&){ return true; });
+    m_model->addLabel(input);
 
-    Components::LabelInfo label1("input1", "", "enter string1", false, [](const QString&){ return false; });
-    m_model->addLabel(label1);
+    Components::LabelInfo key(KEY, "", KEY, false, false, [](const QString&){ return true; });
+    m_model->addLabel(key);
+
+    Components::LabelInfo result(RESULT, "", RESULT, false, true, [](const QString&){ return true; });
+    m_model->addLabel(result);
 }
 
 void Algorithms::XOR::initModel()
@@ -28,19 +32,23 @@ void Algorithms::XOR::initModel()
 }
 
 Algorithms::XOR::XOR()
-    : m_model{new Model::DefaultView()}
+    : m_model{new Model::DefaultView()},
+      m_impl{details::XORImpl()}
 {
     initModel();
 }
 
 void Algorithms::XOR::encode()
 {
-
+    std::string text = m_model->findLabelByName(INPUT)->text().toStdString();
+    std::string key = m_model->findLabelByName(KEY)->text().toStdString();
+    auto result = m_impl.encode(text, key);
+    m_model->findLabelByName(RESULT)->setText(QString::fromStdString(result));
+    emit m_model->findLabelByName(RESULT)->textChanged();
 }
 
 void Algorithms::XOR::decode()
 {
-
 }
 
 void Algorithms::XOR::generateKey()

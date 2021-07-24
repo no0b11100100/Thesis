@@ -41,7 +41,7 @@ public:
 
     QString text() { return m_info.getText(); }
 
-    Q_INVOKABLE void validate() { m_info.executeAction(); }
+    Q_INVOKABLE void execute() { m_info.executeAction(); }
 };
 
 }

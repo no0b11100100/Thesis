@@ -13,46 +13,50 @@ class DefaultView : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(int buttonCount READ buttonCount CONSTANT)
-
     Q_PROPERTY(QObject* labels READ labels CONSTANT)
+    Q_PROPERTY(QObject* buttons READ buttons CONSTANT)
 
 public:
     DefaultView(QObject* parent = nullptr)
         : QObject{parent},
-          m_labels{new Components::Group{parent}}
+          m_labels{new Components::Group{parent}},
+          m_buttons{new Components::Group{parent}}
     {
     }
 
     QObject* labels() { return m_labels.get(); }
-
-    Q_INVOKABLE QObject* buttonAt(int index) {
-        return m_buttons.at(index).get();
-    }
-
-    int buttonCount() const { return m_buttons.size(); }
+    QObject* buttons() { return m_buttons.get(); }
 
     void addButton(const Components::ButtonInfo& buttonInfo)
     {
-        auto item = std::make_unique<Components::Button>();
-        item->setData(buttonInfo);
-        m_buttons.push_back(std::move(item));
-
+        m_buttons->addItem<Components::Button>(buttonInfo);
     }
 
     void addLabel(const Components::LabelInfo& labelInfo)
     {
-//        auto label = std::make_unique<Components::Label>();
-//        label->setData(labelInfo);
-//        m_labels.push_back(std::move(label));
         m_labels->addItem<Components::Label>(labelInfo);
     }
 
+    Components::Label* findLabelByName(const QString& name)
+    {
+        for(int i{0}; i < m_labels->size(); ++i)
+        {
+            QObject* object = m_labels->at(i);
+            assert(typeid(*object) == typeid(Components::Label));
+            Components::Label* label = static_cast<Components::Label*>(object);
+//            assert(label != nullptr);
+            if(label->name() == name)
+                return label;
+        }
+
+        qDebug() << "findLabelByName return nullptr for " << name;
+
+        return nullptr;
+    }
 private:
 
-    std::vector<std::unique_ptr<Components::Button>> m_buttons;
-//    std::vector<std::unique_ptr<Components::Label>> m_labels;
     std::unique_ptr<Components::Group> m_labels;
+    std::unique_ptr<Components::Group> m_buttons;
 };
 
 } // namespace Model
