@@ -44,6 +44,8 @@ set(PROJECT_SOURCES
 
         common/const.hpp
 
+        NavigationList/List.hpp
+
         Algorithms/Interface.hpp
 
         Algorithms/XOR/xor.cpp
