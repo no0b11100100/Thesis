@@ -19,9 +19,9 @@ public:
     LabelInfo() = default;
 
     LabelInfo(const QString& name, const QString& text, const QString& placeholderText,
-              bool ignoreWhitespaces, bool isReadOnly, std::function<bool(const QString&)> validator)
+              bool ignoreWhitespaces, int lineCount, bool isReadOnly, std::function<bool(const QString&)> validator)
         : m_name{name}, m_text{text}, m_placeholderText{placeholderText},
-          isEditing{ignoreWhitespaces}, m_lineCount{0}, m_isReadOnly{isReadOnly}, m_validate{validator}
+          isEditing{ignoreWhitespaces}, m_lineCount{lineCount}, m_isReadOnly{isReadOnly}, m_validate{validator}
     {}
 
     void setName(const QString& name) { m_name = name; }

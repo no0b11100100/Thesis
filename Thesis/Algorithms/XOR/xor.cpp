@@ -15,13 +15,13 @@ void Algorithms::XOR::initButtons()
 
 void Algorithms::XOR::initLabels()
 {
-    Components::LabelInfo input(INPUT, "", INPUT, true, false, [](const QString&){ return true; });
+    Components::LabelInfo input(INPUT, "", INPUT, true, 3, false, [](const QString&){ return true; });
     m_model->addLabel(input);
 
-    Components::LabelInfo key(KEY, "", KEY, false, false, [](const QString&){ return true; });
+    Components::LabelInfo key(KEY, "", KEY, false, 3, false, [](const QString&){ return true; });
     m_model->addLabel(key);
 
-    Components::LabelInfo result(RESULT, "", RESULT, false, true, [](const QString&){ return true; });
+    Components::LabelInfo result(RESULT, "", RESULT, 3, false, true, [](const QString&){ return true; });
     m_model->addLabel(result);
 }
 

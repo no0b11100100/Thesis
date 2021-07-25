@@ -4,5 +4,7 @@
         <file>Views/DefaultView.qml</file>
         <file>Views/ViewWithTables.qml</file>
         <file>Components/LabelArea.qml</file>
+        <file>Components/ButtonArea.qml</file>
+        <file>Style/Style.qml</file>
     </qresource>
 </RCC>

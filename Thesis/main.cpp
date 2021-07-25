@@ -18,6 +18,7 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<Components::Button> ("Button", 1, 0, "Button", "Button error");
     qmlRegisterType<Model::ViewModel, 1>("ViewModel", 1,0,"Model");
     qmlRegisterUncreatableType<Model::DefaultView>("DefaultView", 1, 0, "DefaultView", "DefaultView error");
+    qmlRegisterSingletonType(QUrl("qrc:/UI/Style/Style.qml"), "Style", 1, 0, "Style");
 
     const QUrl url(QStringLiteral("qrc:/UI/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

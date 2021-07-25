@@ -4,7 +4,7 @@ import QtQuick.Controls 2.15
 
 import ViewModel 1.0
 
-import "Components"
+import "Views"
 
 Window {
     id: _root
@@ -17,48 +17,9 @@ Window {
         id: _model
     }
 
-    Column {
-
-        spacing: 2
-        LabelArea {
-            id: _labels
-            width: _root.width
-            height: _root.height-100
-            model: _model.view.labels
-        }
-
-        ButtonArea {
-            width: _root.width
-            height: 50
-            model: _model.view.buttons
-        }
-
+    DefaultView {
+        width: _root.width
+        model: _model.view
     }
-
-
-//    Component.onCompleted: {
-//        console.log(_model.view.buttonCount)
-//    }
-
-//    Loader {
-//        id: _loader
-////        source:
-//    }
-
-//    Row {
-//        spacing: 3
-//        Repeater {
-//            model: _model.view.buttonCount
-//            Button {
-//                id: _button
-//                text: _model.view.buttonAt(index).text
-////                onClicked: _model.view.button(index).validate()
-//                Component.onCompleted: {
-//                    _model.foo(_loader);
-//                    console.log(_model.view.buttonAt(index).text)
-//                }
-//            }
-//        }
-//    }
 
 }

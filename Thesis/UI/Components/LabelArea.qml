@@ -1,6 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import Style 1.0
+
 Rectangle {
     property variant model
 
@@ -19,7 +21,7 @@ Rectangle {
                 placeholderText: label.placeholderText
                 text: label.text
                 readOnly: label.isReadOnly
-                font.pointSize: 16
+                font.pointSize: Style.labelFontSize
 
                 background: Rectangle {
                     color: "white"
