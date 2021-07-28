@@ -3,6 +3,7 @@
 
 #include "common/const.hpp"
 #include "Models/MainModel.hpp"
+#include "NavigationList/List.hpp"
 
 // https://en.wikipedia.org/wiki/RC_algorithm
 
@@ -15,8 +16,9 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
-    qmlRegisterUncreatableType<Components::Button> ("Button", 1, 0, "Button", "Button error");
     qmlRegisterType<Model::ViewModel, 1>("ViewModel", 1,0,"Model");
+    qmlRegisterType<List::NavigationList, 1>("NavigationList", 1,0,"NavigationListModel");
+    qmlRegisterUncreatableType<Components::Button> ("Button", 1, 0, "Button", "Button error");
     qmlRegisterUncreatableType<Model::DefaultView>("DefaultView", 1, 0, "DefaultView", "DefaultView error");
     qmlRegisterSingletonType(QUrl("qrc:/UI/Style/Style.qml"), "Style", 1, 0, "Style");
 

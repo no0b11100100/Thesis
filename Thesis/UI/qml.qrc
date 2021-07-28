@@ -6,5 +6,9 @@
         <file>Components/LabelArea.qml</file>
         <file>Components/ButtonArea.qml</file>
         <file>Style/Style.qml</file>
+        <file>Components/NavigationList.qml</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>Components/NavigationList.qml</file>
     </qresource>
 </RCC>
