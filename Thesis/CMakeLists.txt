@@ -47,6 +47,8 @@ set(PROJECT_SOURCES
         Models/NavigationList/List.hpp
 
         Algorithms/Interface.hpp
+        Algorithms/Matrix/matrix.hpp
+
 
         Algorithms/XOR/xor.cpp
         Algorithms/XOR/xor.h
