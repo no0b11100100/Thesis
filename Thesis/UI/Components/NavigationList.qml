@@ -25,12 +25,12 @@ Rectangle {
         }
 
         Repeater {
-            model: _root.model.size
+            model: _root.model.list.size
 
             Button {
                 id: _item
-                text: _root.model.name(index)
-                onClicked: _root.model.ahead(_item.text)
+                text: _root.model.list.at(index)
+                onClicked: _root.model.forward(_item.text)
             }
         }
     }

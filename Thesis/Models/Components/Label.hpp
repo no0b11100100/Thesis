@@ -13,6 +13,7 @@ class LabelInfo
     bool isEditing;
     int m_lineCount;
     bool m_isReadOnly;
+    bool isFilled;
     std::function<bool(const QString&)> m_validate;
 
 public:
@@ -21,13 +22,14 @@ public:
     LabelInfo(const QString& name, const QString& text, const QString& placeholderText,
               bool ignoreWhitespaces, int lineCount, bool isReadOnly, std::function<bool(const QString&)> validator)
         : m_name{name}, m_text{text}, m_placeholderText{placeholderText},
-          isEditing{ignoreWhitespaces}, m_lineCount{lineCount}, m_isReadOnly{isReadOnly}, m_validate{validator}
+          isEditing{ignoreWhitespaces}, m_lineCount{lineCount}, m_isReadOnly{isReadOnly},
+          isFilled{false}, m_validate{validator}
     {}
 
     void setName(const QString& name) { m_name = name; }
     QString name() const { return m_name; }
 
-    void setText(const QString& text) { m_text = text; }
+    void setText(const QString& text) { isFilled = true; m_text = text; }
     QString text() const { return m_text; }
 
     QString placeholderText() const { return m_placeholderText; }

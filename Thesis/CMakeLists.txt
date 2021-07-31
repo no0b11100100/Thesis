@@ -44,7 +44,7 @@ set(PROJECT_SOURCES
 
         common/const.hpp
 
-        NavigationList/List.hpp
+        Models/NavigationList/List.hpp
 
         Algorithms/Interface.hpp
 
