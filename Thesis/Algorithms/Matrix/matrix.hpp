@@ -12,6 +12,20 @@ class Matrix
 {
     std::array<std::array<T, Rows>, Columns> m_matrix;
 
+    using FindingResult = std::pair<bool, int>;
+
+    template<class Line>
+    FindingResult find(const Line& line, T item)
+    {
+        auto it = std::find(line.cbegin(), line.cend(), item);
+        bool status = it != line.cend();
+        if(!status)
+            return {status, -1};
+
+        auto itemIndex = std::distance(line.cbegin(), it);
+        return {status, itemIndex};
+    }
+
 public:
     Matrix() = default;
 
@@ -33,6 +47,7 @@ public:
     }
 
     unsigned rows() const { return Rows; }
+
     unsigned columns() const { return Columns; }
 
     auto Column(int index) const
@@ -49,6 +64,7 @@ public:
 
         return result;
     }
+
     auto Row(int index) const
     {
         assert(index >= 0 && index < Rows);
@@ -62,6 +78,7 @@ public:
 
         m_matrix.at(index) = rowData;
     }
+
     void ChangeColumn(int index, const std::initializer_list<T>& columnData)
     {
         assert(index >= 0 && index < Columns);
@@ -90,6 +107,10 @@ public:
 
         return m_matrix.at(row).at(column);
     }
+
+    FindingResult findInRow(int index, T item) { return find(Row(index), item); }
+
+    FindingResult findInColumn(int index, T item) { return find(Column(index), item); }
 
     friend Matrix operator^(const Matrix& lhs, const Matrix& rhs)
     {
