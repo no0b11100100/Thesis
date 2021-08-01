@@ -18,12 +18,11 @@ class Matrix
     FindingResult find(const Line& line, T item)
     {
         auto it = std::find(line.cbegin(), line.cend(), item);
-        bool status = it != line.cend();
-        if(!status)
-            return {status, -1};
+        if(it == line.cend())
+            return {false, -1};
 
         auto itemIndex = std::distance(line.cbegin(), it);
-        return {status, itemIndex};
+        return {true, itemIndex};
     }
 
 public:
@@ -108,9 +107,33 @@ public:
         return m_matrix.at(row).at(column);
     }
 
-    FindingResult findInRow(int index, T item) { return find(Row(index), item); }
+    FindingResult FindInRow(int index, T item) { return find(Row(index), item); }
 
-    FindingResult findInColumn(int index, T item) { return find(Column(index), item); }
+    FindingResult FindInColumn(int index, T item) { return find(Column(index), item); }
+
+    void PermutateRows(const std::initializer_list<int>& indexs)
+    {
+        assert(indexs.size() == Rows);
+        auto tmp = m_matrix;
+        auto it = m_matrix.begin();
+        for(const auto& index : indexs)
+        {
+            *it = tmp.Row(index);
+            ++it;
+        }
+    }
+
+    void PermutateColumns(const std::initializer_list<int>& indexs)
+    {
+        assert(indexs.size() == Columns);
+        auto tmp = m_matrix;
+        int i{0};
+        for(const auto& index : indexs)
+        {
+            ChangeColumn(i,tmp.Column(index));
+            ++i;
+        }
+    }
 
     friend Matrix operator^(const Matrix& lhs, const Matrix& rhs)
     {
@@ -126,6 +149,5 @@ public:
     }
 
 };
-
 
 }
