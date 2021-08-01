@@ -1,8 +1,10 @@
 #pragma once
 #include <QObject>
+#include <QDebug>
 #include <vector>
 #include <unordered_map>
 #include <iostream>
+#include <memory>
 
 #include "../../common/const.hpp"
 
@@ -48,18 +50,23 @@ public:
         m_list = {
             {
                 item(CRYPTOGRAPHY_GROUP, {
+                    item(XOR, {}),
+                    item(PERMUTATION, {}),
+                    item(REPLACEMENT, {}),
+                    item(VIGENERE, {}),
+                    item(RSA, {}),
+                    item(AES, {}),
                     item(RC, {
                         item(RC2, {}),
                         item(RC4, {}),
                         item(RC5, {}),
                         item(RC6, {})
                     }),
-                    item(XOR, {}),
-                    item(PERMUTATION, {}),
-                    item(REPLACEMENT, {}),
-                    item(RSA, {}),
-                    item(AES, {}),
-                    item(VIGENERE, {})
+                    item(DES_ES, {
+                        item(SDES, {}),
+                        item(DES, {}),
+                        item(TRIPLE_DES, {})
+                    }),
                 })
             },
             {

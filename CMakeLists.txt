@@ -56,6 +56,9 @@ set(PROJECT_SOURCES
         Algorithms/XOR/Impl/xorImpl.cpp
         Algorithms/XOR/Impl/xorImpl.h
 
+        Algorithms/DESes/SDES/SDES.h
+        Algorithms/DESes/SDES/SDES.cpp
+
         UI/qml.qrc
 )
 

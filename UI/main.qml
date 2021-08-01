@@ -38,6 +38,10 @@ Window {
             onLoaded: {
                 item.model = _algo.model
             }
+
+            Component.onCompleted: {
+                console.log(_algo.model.path)
+            }
         }
     }
 }

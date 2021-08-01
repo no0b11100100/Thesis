@@ -31,6 +31,12 @@ public:
         m_items.push_back(std::move(item));
     }
 
+    void addGroup(std::unique_ptr<QObject> ptr)
+    {
+        m_items.push_back(std::move(ptr));
+        qDebug() << "addGroup" << m_items.size();
+    }
+
 private:
 
     std::vector<std::unique_ptr<QObject>> m_items;

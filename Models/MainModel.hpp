@@ -4,7 +4,7 @@
 
 #include "../Algorithms/Interface.hpp"
 #include "../Algorithms/XOR/xor.h"
-
+#include "../Algorithms/DESes/SDES/SDES.h"
 #include "NavigationList/List.hpp"
 
 namespace Model
@@ -27,7 +27,6 @@ public slots:
         }
     }
 
-
 signals:
     void viewChanged();
 
@@ -35,9 +34,10 @@ public:
     ViewModel(QObject* parent = nullptr)
         : QObject{parent},
           m_navigationList{new List::NavigationList(parent)},
-          m_currentView{TRANSIENT}
+          m_currentView{SDES}
     {
-        m_algorithms.emplace("XOR", new Algorithms::XOR());
+        m_algorithms.emplace(XOR, new Algorithms::XOR());
+        m_algorithms.emplace(SDES, new Algorithms::SDES());
 
         QObject::connect(m_navigationList.get(), SIGNAL(listChanged(const QString&)), this, SLOT(changeView(const QString&)));
     }
@@ -45,8 +45,6 @@ public:
     QObject* view()
     {
         qDebug() << "view" << m_currentView;
-        if(m_currentView == TRANSIENT)
-            return m_algorithms.at("XOR")->model();
         if(m_algorithms.find(m_currentView) != m_algorithms.end())
             return m_algorithms.at(m_currentView)->model();
 
