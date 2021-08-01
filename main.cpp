@@ -4,6 +4,8 @@
 #include "common/const.hpp"
 #include "Models/MainModel.hpp"
 
+#include "Algorithms/Matrix/matrix.hpp"
+
 // https://en.wikipedia.org/wiki/RC_algorithm
 
 int main(int argc, char *argv[])
