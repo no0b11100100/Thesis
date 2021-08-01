@@ -15,6 +15,7 @@ class DefaultView : public QObject
 
     Q_PROPERTY(QObject* labels READ labels CONSTANT)
     Q_PROPERTY(QObject* buttons READ buttons CONSTANT)
+    Q_PROPERTY(QString path READ path CONSTANT)
 
 public:
     DefaultView(QObject* parent = nullptr)
@@ -53,6 +54,9 @@ public:
 
         return nullptr;
     }
+
+    QString path() const { return "qrc:/UI/Views/DefaultView.qml"; }
+
 private:
 
     std::unique_ptr<Components::Group> m_labels;

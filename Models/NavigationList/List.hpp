@@ -33,6 +33,7 @@ class NavigationList : public QObject
     Q_OBJECT
 
     Q_PROPERTY(QObject* list READ list NOTIFY listChanged)
+    Q_PROPERTY(int length READ maxLength CONSTANT)
 
 signals:
     void listChanged(const QString&);
@@ -41,7 +42,8 @@ public:
 
     NavigationList(QObject* parent = nullptr)
         : QObject{parent},
-          m_currentList{new StringList{parent}}
+          m_currentList{new StringList{parent}},
+          m_maxLength{0}
     {
         m_list = {
             {
@@ -73,6 +75,8 @@ public:
     }
 
     QObject* list() { return m_currentList.get(); }
+
+    int maxLength() const { return m_maxLength; }
 
     Q_INVOKABLE void back()
     {
@@ -144,6 +148,8 @@ private:
         for(auto& el : it._list)
         {
             el._prev = &it;
+            if(auto elSize = el._title.size(); elSize > m_maxLength)
+                m_maxLength = elSize;
             createLinks(el);
         }
     }
@@ -158,6 +164,7 @@ private:
     std::vector<item> m_list;
     std::unique_ptr<StringList> m_currentList;
     item* m_current = nullptr;
+    int m_maxLength;
 };
 
 

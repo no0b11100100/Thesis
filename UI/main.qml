@@ -13,21 +13,31 @@ Window {
     width: 640
     height: 480
     visible: true
-    title: qsTr("Hello World")
+    title: qsTr("CryptoTool")
+    color: "black"
 
     Model {
         id: _model
     }
 
-    DefaultView {
-        width: _root.width
-        model: _model.view
-    }
+    Row {
+        spacing: 2
+        NavigationList {
+            id: _list
+            width: Math.min(_model.navigationList.length * 15, _root.width-_algo.width)
+            height: _root.height
+            model: _model.navigationList
+        }
 
-    NavigationList {
-        width: 200
-        height: _root.height
-        model: _model.navigationList
+        Loader {
+            readonly property variant model: _model.view
+            id: _algo
+            source: _algo.model.path
+            width: _root.width - _list.width
+            height: _root.height
+            onLoaded: {
+                item.model = _algo.model
+            }
+        }
     }
-
 }

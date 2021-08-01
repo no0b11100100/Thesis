@@ -30,6 +30,7 @@ Rectangle {
             Button {
                 id: _item
                 text: _root.model.list.at(index)
+                width: _root.width
                 onClicked: _root.model.forward(_item.text)
             }
         }
