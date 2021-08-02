@@ -8,5 +8,6 @@
         <file>Style/Style.qml</file>
         <file>Components/NavigationList.qml</file>
         <file>Components/GroupLabelArea.qml</file>
+        <file>Components/TableArea.qml</file>
     </qresource>
 </RCC>

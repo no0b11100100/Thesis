@@ -12,6 +12,7 @@ class LabelInfo
     QString m_placeholderText;
     bool isEditing;
     int m_lineCount;
+    int m_maxLength;
     bool m_isReadOnly;
     bool isFilled;
     std::function<bool(const QString&)> m_validate;

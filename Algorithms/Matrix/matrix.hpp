@@ -28,6 +28,13 @@ class Matrix
 public:
     Matrix() = default;
 
+    Matrix(T defaultValue)
+    {
+        for(auto& row : m_matrix)
+            for(auto& el : row)
+                el = defaultValue;
+    }
+
     Matrix(const std::initializer_list<std::initializer_list<T>>& matrix)
     {
         assert (matrix.size() == Rows);
@@ -44,6 +51,12 @@ public:
             ++rowIt;
         }
     }
+
+    auto begin() { return m_matrix.begin(); }
+    auto end() { return m_matrix.end(); }
+
+    auto cbegin() const { return m_matrix.cbegin(); }
+    auto cend() const { return m_matrix.cend(); }
 
     unsigned rows() const { return Rows; }
 
@@ -147,7 +160,6 @@ public:
 
         return result;
     }
-
 };
 
 }

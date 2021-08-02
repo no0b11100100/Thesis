@@ -31,10 +31,18 @@ public:
         m_items.push_back(std::move(item));
     }
 
+    // TODO: remove
     void addGroup(std::unique_ptr<QObject> ptr)
     {
         m_items.push_back(std::move(ptr));
         qDebug() << "addGroup" << m_items.size();
+    }
+
+    template<class T, class Info>
+    void addGroup(const std::vector<Info>& info)
+    {
+        for(const auto& item : info)
+            addItem<T>(item);
     }
 
 private:

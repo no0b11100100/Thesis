@@ -2,6 +2,13 @@
 
 #include <QDebug>
 
+void Algorithms::SDES::initTables()
+{
+    Components::TableInfo sbox(1,1, {Components::LabelInfo("", "text", "", true, 1, false, [](const QString&){ return true; }),});
+    m_model->addTable(sbox);
+    m_model->addTable(sbox);
+}
+
 void Algorithms::SDES::initButtons()
 {
     Components::ButtonInfo generateKeyButton("Key", [&](){ generateKey(); });
@@ -16,32 +23,37 @@ void Algorithms::SDES::initButtons()
 
 void Algorithms::SDES::initLabels()
 {
-    m_model->addGroup({Components::LabelInfo("Text", "", "Text", true, 1, false, [](const QString&){ return true; })});
-    m_model->addGroup({Components::LabelInfo("Key", "", "Key", true, 1, false, [](const QString&){ return true; })});
-    m_model->addGroup({
+    // TODO: make vectors of LabelInfo and use template addGroup
+    m_model->addLabelGroup({Components::LabelInfo("Text", "", "Text", true, 1, false, [](const QString&){ return true; })});
+    m_model->addLabelGroup({Components::LabelInfo("Key", "", "Key", true, 1, false, [](const QString&){ return true; })});
+    m_model->addLabelGroup({
                 Components::LabelInfo("IP", "", "IP", true, 1, false, [](const QString&){ return true; }),
                 Components::LabelInfo("EXPANDED", "", "EXPANDED", true, 1, false, [](const QString&){ return true; }),
                       });
-    m_model->addGroup({
+    m_model->addLabelGroup({
                 Components::LabelInfo("SBOX_PERMUTATION", "", "SBOX_PERMUTATION", true, 1, false, [](const QString&){ return true; }),
                 Components::LabelInfo("IP_1", "", "IP_1", true, 1, false, [](const QString&){ return true; }),
                       });
-    m_model->addGroup({
+    m_model->addLabelGroup({
                 Components::LabelInfo("P_10", "", "P_10", true, 1, false, [](const QString&){ return true; }),
                 Components::LabelInfo("P_8", "", "P_8", true, 1, false, [](const QString&){ return true; }),
                       });
-    m_model->addGroup({Components::LabelInfo("RESULT", "", "RESULT", true, 1, false, [](const QString&){ return true; })});
+    m_model->addLabelGroup({Components::LabelInfo("RESULT", "", "RESULT", true, 1, false, [](const QString&){ return true; })});
 }
 
 void Algorithms::SDES::initModel()
 {
     initLabels();
     initButtons();
+    initTables();
 }
 
 Algorithms::SDES::SDES()
     : m_model{new Model::ModelWithTables()}
 {
+    for(auto& el : m_sBox)
+        el = std::make_unique<Components::Table>();
+
     initModel();
 }
 
