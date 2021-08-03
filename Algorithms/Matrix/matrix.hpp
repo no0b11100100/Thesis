@@ -7,6 +7,21 @@
 namespace Matrix
 {
 
+enum class ShiftDirection
+{
+    Left,
+    Right,
+    Up,
+    Down
+};
+
+enum class Rotation
+{
+    _90,
+    _180,
+    _270
+};
+
 template <class T, unsigned Rows, unsigned Columns>
 class Matrix
 {
@@ -83,24 +98,24 @@ public:
         return m_matrix.at(index);
     }
 
-    void ChangeRow(int index, const std::initializer_list<T>& rowData)
+    void ChangeRow(int index, const std::array<T, Rows>& rowData)
     {
         assert(index >= 0 && index < Rows);
-        assert(rowData < Rows);
+        assert(rowData.size() == Rows);
 
         m_matrix.at(index) = rowData;
     }
 
-    void ChangeColumn(int index, const std::initializer_list<T>& columnData)
+    void ChangeColumn(int index, const std::array<T, Columns>& columnData)
     {
         assert(index >= 0 && index < Columns);
-        assert(columnData < Columns);
+        assert(columnData.size() == Columns);
 
-        auto it = m_matrix.at(index).begin();
-        for(const auto item : columnData)
+        int i{0};
+        for(const auto& item : columnData)
         {
-            *it = item;
-            ++it;
+            at(i, index) = item;
+            ++i;
         }
     }
 
@@ -146,6 +161,90 @@ public:
             ChangeColumn(i,tmp.Column(index));
             ++i;
         }
+    }
+
+    // TODO: make common function
+    void ShiftRow(int index, ShiftDirection direction, int offset)
+    {
+        auto row = Row(index);
+
+        if(direction == ShiftDirection::Left)
+        {
+            for(int i{offset}, j{0}; j < Rows; ++i, ++j)
+            {
+                if(i == Rows) i = 0;
+                row.at(j) = m_matrix.at(index).at(i);
+            }
+        }
+        else if(direction == ShiftDirection::Right)
+        {
+            for(int i{offset}, j{0}; j < Rows; ++i, ++j)
+            {
+                if(i == Rows) i = 0;
+                row.at(i) = m_matrix.at(index).at(j);
+            }
+        }
+
+        ChangeRow(index, row);
+    }
+
+    void ShiftColumn(int index, ShiftDirection direction, int offset)
+    {
+        auto column = Column(index);
+        auto matrixColumn = column;
+        if(direction == ShiftDirection::Up)
+        {
+            for(int i{offset}, j{0}; j < Columns; ++i, ++j)
+            {
+                if(i == Columns) i = 0;
+                column.at(j) = matrixColumn.at(i);
+            }
+        }
+        else if(direction == ShiftDirection::Down)
+        {
+            for(int i{0}, j{offset}; i < Columns; ++i, ++j)
+            {
+                if(j == Columns) j = 0;
+                column.at(j) = matrixColumn.at(i);
+            }
+        }
+
+        ChangeColumn(index, column);
+    }
+
+    void Rotate(Rotation rotation)
+    {
+        if(rotation == Rotation::_180)
+        {
+            for(auto& row : m_matrix)
+                std::reverse(row.begin(), row.end());
+
+            std::reverse(m_matrix.begin(), m_matrix.end());
+        }
+        else if(rotation == Rotation::_270)
+        {
+            auto tmp = m_matrix;
+
+            int i{0};
+            for(auto row : tmp)
+            {
+                std::reverse(row.begin(), row.end());
+                ChangeColumn(i, row);
+                ++i;
+            }
+        }
+        else if(rotation == Rotation::_90)
+        {
+            auto tmp = m_matrix;
+
+            int i{Columns-1};
+            for(const auto row : tmp)
+            {
+                ChangeColumn(i, row);
+                --i;
+            }
+        }
+
     }
 
     friend Matrix operator^(const Matrix& lhs, const Matrix& rhs)
