@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <QObject>
 
 #include <memory>
@@ -6,15 +6,18 @@
 #include "Group.hpp"
 #include "Label.hpp"
 
+#include <QMetaProperty>
+
 namespace Components {
 
 struct TableInfo
 {
     int _size;
     int _columnLimit;
-    std::vector<Components::LabelInfo> _items;
+    using TableGrid = std::vector<std::vector<Components::LabelInfo>>;
+    TableGrid _items;
 
-    TableInfo(int size, int columnLimit, const std::vector<Components::LabelInfo>& labels)
+    TableInfo(int size, int columnLimit, const TableGrid& labels)
         : _size{size},
           _columnLimit{columnLimit},
           _items{labels}
@@ -48,8 +51,11 @@ private:
 
     void initTable()
     {
-        m_data->addGroup<Components::Label>(m_info._items);
-        qDebug() << "table size" << m_info._items.size() << m_data->size();
+        for(auto group : m_info._items)
+        {
+            qDebug() << "group" << typeid(m_info._items).name() << typeid(group).name();
+            m_data->addGroup<Components::Label>(group);
+        }
     }
 
     std::unique_ptr<Components::Group> m_data;

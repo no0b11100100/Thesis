@@ -11,8 +11,14 @@ Rectangle {
         spacing: 2
         GroupLabelArea {
             width: _root.width
-            height: _root.height-40
+            height: _root.height-40-200
             model: _root.model.labels
+        }
+
+        TableArea {
+            width: _root.width
+            height: 100
+            model: _root.model.tables
         }
 
         ButtonArea {

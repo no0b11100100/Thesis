@@ -4,7 +4,13 @@
 
 void Algorithms::SDES::initTables()
 {
-    Components::TableInfo sbox(1,1, {Components::LabelInfo("", "text", "", true, 1, false, [](const QString&){ return true; }),});
+    Components::TableInfo::TableGrid a {
+        {Components::LabelInfo("", "text", "", true, 1, false, [](const QString&){ return true; })},
+        {Components::LabelInfo("", "text", "", true, 1, false, [](const QString&){ return true; })},
+        {Components::LabelInfo("", "text", "", true, 1, false, [](const QString&){ return true; })},
+    };
+
+    Components::TableInfo sbox(3,1, a);
     m_model->addTable(sbox);
     m_model->addTable(sbox);
 }
@@ -23,7 +29,6 @@ void Algorithms::SDES::initButtons()
 
 void Algorithms::SDES::initLabels()
 {
-    // TODO: make vectors of LabelInfo and use template addGroup
     m_model->addLabelGroup({Components::LabelInfo("Text", "", "Text", true, 1, false, [](const QString&){ return true; })});
     m_model->addLabelGroup({Components::LabelInfo("Key", "", "Key", true, 1, false, [](const QString&){ return true; })});
     m_model->addLabelGroup({

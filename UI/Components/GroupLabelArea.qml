@@ -27,6 +27,9 @@ Rectangle {
                         text: label.text
                         placeholderText: label.placeholderText
 
+                        background: Rectangle {
+                            color: "green"
+                        }
 //                        background: Rectangle {
 //                            color: index === 0 ? "green" : "red"
 //                        }
