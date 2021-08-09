@@ -9,5 +9,7 @@
         <file>Components/NavigationList.qml</file>
         <file>Components/GroupLabelArea.qml</file>
         <file>Components/TableArea.qml</file>
+        <file>Components/Label.qml</file>
+        <file>Components/Button.qml</file>
     </qresource>
 </RCC>
