@@ -42,6 +42,11 @@ set(PROJECT_SOURCES
         Models/Components/Table.hpp
         Models/Components/Group.hpp
 
+        Models/TreeView/TreeItem.h
+        Models/TreeView/TreeItem.cpp
+        Models/TreeView/TreeModel.h
+        Models/TreeView/TreeModel.cpp
+
         common/const.hpp
 
         Models/NavigationList/List.hpp
